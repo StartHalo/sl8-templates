@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-05-26T00:43:42Z",
+  "sourceCommit": "ed6852932c85bc469d16a6ff46d0a605b38fb4cc",
+  "templates": [
+    {
+      "name": "sl8-base",
+      "status": "active",
+      "currentVersion": "v20260522-175354",
+      "aliases": {
+        "versioned": "sl8-base-v20260522-175354",
+        "generic": "sl8-base"
+      },
+      "components": [
+        {
+          "name": "Node.js",
+          "version": "20.x"
+        },
+        {
+          "name": "@starthalo/ai-gen",
+          "version": "1.1.2"
+        },
+        {
+          "name": "@starthalo/skills-cli",
+          "version": "1.1.1"
+        },
+        {
+          "name": "@anthropic-ai/claude-code",
+          "version": "2.1.141"
+        },
+        {
+          "name": "pnpm",
+          "version": "10.33.4"
+        },
+        {
+          "name": "yarn",
+          "version": "1.22.22"
+        },
+        {
+          "name": "typescript",
+          "version": "5.x"
+        },
+        {
+          "name": "gcsfuse",
+          "version": "system"
+        }
+      ]
+    },
+    {
+      "name": "sl8-animation",
+      "status": "active",
+      "currentVersion": "v20260523-150356",
+      "aliases": {
+        "versioned": "sl8-animation-v20260523-150356",
+        "generic": "sl8-animation"
+      },
+      "base": {
+        "template": "sl8-base",
+        "version": "v20260522-175354"
+      },
+      "packs": [
+        {
+          "id": "python-runtime",
+          "version": "1.0.0",
+          "description": "Python 3 + pip + venv + build tooling for native extensions.",
+          "provides": [
+            "python3",
+            "pip3",
+            "venv"
+          ],
+          "agentGuidance": "Python 3 is at `python3` (no unversioned `python`). Use `pip3 install --break-system-packages <pkg>` for system-wide installs (this image follows PEP 668), or `python3 -m venv .venv && source .venv/bin/activate` for a project-local venv. Native-extension build tools (build-essential, pkg-config, python3-dev) are present, so packages like Pillow, lxml, manim can compile from source if needed."
+        },
+        {
+          "id": "ffmpeg",
+          "version": "1.0.0",
+          "description": "FFmpeg for video/audio encoding and frame-to-MP4 assembly.",
+          "provides": [
+            "ffmpeg",
+            "ffprobe"
+          ],
+          "agentGuidance": "Use `ffmpeg -i <input> <output>` for transcoding, `ffmpeg -framerate <fps> -i frame_%04d.png out.mp4` for frame sequences, and `ffprobe -v quiet -print_format json -show_format -show_streams <file>` to inspect media. The Debian ffmpeg build includes the common codecs (libx264, libvpx, aac); use `-c:v libx264 -pix_fmt yuv420p` for broadly-compatible MP4 output."
+        },
+        {
+          "id": "latex",
+          "version": "1.0.0",
+          "description": "TeX Live (LaTeX) + dvisvgm — needed for MathTex / Tex rendering in animation pipelines and for PDF/SVG math output.",
+          "provides": [
+            "latex",
+            "pdflatex",
+            "dvisvgm",
+            "tex"
+          ],
+          "agentGuidance": "Compile LaTeX with `pdflatex <file.tex>` or `latex <file.tex>`. The texlive-latex-extra, texlive-fonts-extra, texlive-latex-recommended, texlive-science and tipa packages are included — covering Manim's `MathTex`/`Tex` requirements and most paper-style documents. Use `dvisvgm <file.dvi>` to convert DVI to SVG. First invocation is slow (font cache build); subsequent calls are fast."
+        },
+        {
+          "id": "xvfb",
+          "version": "1.0.0",
+          "description": "Xvfb virtual framebuffer + Mesa OpenGL libs — lets headless OpenGL workloads (ManimGL, Blender headless, etc.) render without a real display.",
+          "provides": [
+            "xvfb-run",
+            "Xvfb"
+          ],
+          "agentGuidance": "Wrap OpenGL/GUI commands with `xvfb-run -a <command>` to give them a virtual display (`-a` auto-picks a free server number). For longer pipelines export a persistent display: `Xvfb :99 -screen 0 1920x1080x24 & export DISPLAY=:99`. Required for ManimGL (`manimgl`); not required for Manim CE (`manim`) which renders headlessly via Cairo."
+        },
+        {
+          "id": "manim",
+          "version": "1.0.0",
+          "description": "Manim Community Edition (manim) + ManimGL (manimlib) — the two leading Python animation engines, with their native Cairo/Pango deps.",
+          "provides": [
+            "manim",
+            "manimgl"
+          ],
+          "agentGuidance": "Two engines coexist. Manim CE — `manim -ql <file.py> <SceneClass>` (Cairo-based, headless, default for most agents). ManimGL — `xvfb-run -a manimgl <file.py> <SceneClass>` (OpenGL; the import itself opens a display, so any `manimgl` invocation or even `import manimlib` must be wrapped in `xvfb-run -a` or run with `DISPLAY` set — the xvfb pack provides this). Python import names differ: `import manim` vs `import manimlib`. Renders land in `./media/videos/<file>/<quality>/<SceneClass>.mp4` by default; pass `--media_dir /home/user/artifacts` to redirect into the artifacts mount. Use `-ql` (480p), `-qm` (720p), `-qh` (1080p) to trade speed for quality."
+        }
+      ]
+    }
+  ],
+  "archivedTemplates": [
+    {
+      "name": "sl8-image-video",
+      "lastVersion": "v20260124-222612",
+      "replacedBy": "sl8-base"
+    },
+    {
+      "name": "ai-kits-gcs",
+      "lastVersion": "v20260121-005310",
+      "replacedBy": "sl8-base"
+    },
+    {
+      "name": "coding-agent-gcs",
+      "lastVersion": "v2025-11-12",
+      "replacedBy": "sl8-base"
+    }
+  ]
+}
