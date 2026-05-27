@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cdn.jsdelivr.net/gh/StartHalo/sl8-templates@main/templates.schema.json",
+  "title": "StartHalo sl8-* E2B templates registry",
+  "description": "Public, machine-readable inventory of the sl8-* family of E2B sandbox templates and their tool packs. Generated from StartHalo/sl8-tools and mirrored to StartHalo/sl8-templates. See docs/features/e2b-templates-registry/ in sl8-tools for full documentation.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "sourceCommit",
+    "templates",
+    "archivedTemplates"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1,
+      "description": "Major schema version. Incompatible changes bump this; consumers MAY refuse to parse files whose version they don't understand."
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp of when this snapshot was generated."
+    },
+    "sourceCommit": {
+      "type": "string",
+      "pattern": "^([0-9a-f]{40}|uncommitted)$",
+      "description": "Full 40-char git SHA of the sl8-tools commit this snapshot was generated from, or the literal 'uncommitted' for ad-hoc local runs."
+    },
+    "templates": {
+      "type": "array",
+      "description": "Every active sl8-* template, sorted with sl8-base first then alphabetically.",
+      "items": { "$ref": "#/$defs/TemplateEntry" }
+    },
+    "archivedTemplates": {
+      "type": "array",
+      "description": "Templates that used to exist and have been replaced.",
+      "items": { "$ref": "#/$defs/ArchivedEntry" }
+    }
+  },
+  "$defs": {
+    "TemplateEntry": {
+      "type": "object",
+      "description": "An active sl8-* template. Either has `components` (base templates) or `base` + `packs` (variant templates).",
+      "additionalProperties": true,
+      "required": ["name", "status", "currentVersion", "aliases"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^sl8-[a-z0-9-]+$",
+          "description": "Template name. Matches the directory under e2b/ in sl8-tools AND the generic alias."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active"],
+          "description": "Currently always 'active'. Archived templates live in archivedTemplates. Reserved field for future statuses."
+        },
+        "currentVersion": {
+          "type": "string",
+          "pattern": "^v[0-9]{8}-[0-9]{6}$",
+          "description": "Timestamped version (vYYYYMMDD-HHMMSS) currently promoted for this template."
+        },
+        "aliases": {
+          "type": "object",
+          "required": ["versioned", "generic"],
+          "additionalProperties": false,
+          "properties": {
+            "versioned": {
+              "type": "string",
+              "description": "Pinned alias — '<name>-<currentVersion>'. Use for reproducible jobs. Never auto-updates."
+            },
+            "generic": {
+              "type": "string",
+              "description": "Floating alias equal to `name`. Resolves to whatever is currently promoted. Auto-updates on every promotion."
+            }
+          }
+        },
+        "components": {
+          "type": "array",
+          "description": "Installed tools/runtimes on a base template (e.g. sl8-base). Mutually exclusive with `packs`.",
+          "items": {
+            "type": "object",
+            "required": ["name", "version"],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Canonical package name (e.g. '@anthropic-ai/claude-code') or runtime label ('Node.js', 'gcsfuse')."
+              },
+              "version": {
+                "type": "string",
+                "description": "Version pinned at template build time. May be a full semver, a major-only marker ('20.x'), or 'system' for OS-provided components."
+              }
+            }
+          }
+        },
+        "base": {
+          "type": "object",
+          "description": "The base template this variant inherits from. Present on variants; absent on base templates.",
+          "required": ["template", "version"],
+          "additionalProperties": false,
+          "properties": {
+            "template": {
+              "type": "string",
+              "description": "Base template name (e.g. 'sl8-base')."
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^v[0-9]{8}-[0-9]{6}$",
+              "description": "Exact base version this variant's template.ts pins via fromTemplate(...)."
+            }
+          }
+        },
+        "packs": {
+          "type": "array",
+          "description": "Tool packs layered on top of the base, in install order. Mutually exclusive with `components`.",
+          "items": { "$ref": "#/$defs/PackEntry" }
+        }
+      },
+      "oneOf": [
+        { "required": ["components"], "not": { "required": ["base"] } },
+        { "required": ["base", "packs"], "not": { "required": ["components"] } }
+      ]
+    },
+    "PackEntry": {
+      "type": "object",
+      "description": "A tool pack layered onto a variant template.",
+      "required": ["id", "version", "description", "provides", "agentGuidance"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Stable ID (matches the pack directory under e2b/tool-packs/)."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
+          "description": "Semver. Bumped when install behaviour or agentGuidance changes."
+        },
+        "description": {
+          "type": "string",
+          "description": "One-line human description."
+        },
+        "provides": {
+          "type": "array",
+          "description": "CLIs / capabilities this pack exposes (e.g. ['ffmpeg', 'ffprobe']).",
+          "items": { "type": "string" }
+        },
+        "agentGuidance": {
+          "type": "string",
+          "description": "Concrete usage instructions for skills/agents using this pack's tooling. Also baked into /etc/sl8/capabilities.json inside the sandbox."
+        }
+      }
+    },
+    "ArchivedEntry": {
+      "type": "object",
+      "required": ["name", "lastVersion", "replacedBy"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Template that used to exist."
+        },
+        "lastVersion": {
+          "type": "string",
+          "description": "Last version published before archival."
+        },
+        "replacedBy": {
+          "type": "string",
+          "description": "Current template consumers should use instead."
+        }
+      }
+    }
+  }
+}
