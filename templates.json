@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-26T00:43:42Z",
-  "sourceCommit": "ed6852932c85bc469d16a6ff46d0a605b38fb4cc",
+  "generatedAt": "2026-05-28T18:43:55Z",
+  "sourceCommit": "8fdc912006a9b5e462fbd314d0147c3b6ec48649",
   "templates": [
     {
       "name": "sl8-base",
@@ -44,7 +44,26 @@
           "name": "gcsfuse",
           "version": "system"
         }
-      ]
+      ],
+      "ui": {
+        "displayName": "General",
+        "emoji": "🤖",
+        "tagline": "Default runtime. Best for chat, code, and content workflows.",
+        "description": "The general-purpose workspace most bots should use. Includes Claude Code, AI Gen, the Skills CLI, a TypeScript toolchain, and all three Node package managers. Pick this when you don't need anything beyond standard web/Node/AI tooling.",
+        "capabilities": [
+          "Claude Code",
+          "AI Gen",
+          "TypeScript",
+          "Skills CLI",
+          "GCS mount",
+          "npm · pnpm · yarn"
+        ],
+        "packageOverrides": {
+          "@anthropic-ai/claude-code": {
+            "blurb": "Anthropic's coding assistant runs right inside the workspace."
+          }
+        }
+      }
     },
     {
       "name": "sl8-animation",
@@ -112,7 +131,28 @@
           ],
           "agentGuidance": "Two engines coexist. Manim CE — `manim -ql <file.py> <SceneClass>` (Cairo-based, headless, default for most agents). ManimGL — `xvfb-run -a manimgl <file.py> <SceneClass>` (OpenGL; the import itself opens a display, so any `manimgl` invocation or even `import manimlib` must be wrapped in `xvfb-run -a` or run with `DISPLAY` set — the xvfb pack provides this). Python import names differ: `import manim` vs `import manimlib`. Renders land in `./media/videos/<file>/<quality>/<SceneClass>.mp4` by default; pass `--media_dir /home/user/artifacts` to redirect into the artifacts mount. Use `-ql` (480p), `-qm` (720p), `-qh` (1080p) to trade speed for quality."
         }
-      ]
+      ],
+      "ui": {
+        "displayName": "Animation",
+        "emoji": "🎬",
+        "tagline": "Adds Python, Manim, ffmpeg, and LaTeX on top of General.",
+        "description": "Everything in General, plus the full Manim animation stack: Python 3.11, Manim Community Edition + ManimGL, ffmpeg, TeX Live, and Xvfb for headless GL rendering. Use this when your bot needs to render math or diagram videos.",
+        "capabilities": [
+          "Claude Code",
+          "Python 3.11",
+          "Manim",
+          "ffmpeg",
+          "LaTeX"
+        ],
+        "packageOverrides": {
+          "manim": {
+            "blurb": "Render math and diagram animations as MP4."
+          },
+          "ffmpeg": {
+            "blurb": "Encode and convert video and audio."
+          }
+        }
+      }
     }
   ],
   "archivedTemplates": [

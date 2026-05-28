@@ -116,12 +116,79 @@
           "type": "array",
           "description": "Tool packs layered on top of the base, in install order. Mutually exclusive with `components`.",
           "items": { "$ref": "#/$defs/PackEntry" }
+        },
+        "ui": {
+          "$ref": "#/$defs/Ui",
+          "description": "Optional curated display copy (name, emoji, tagline, capability chips, per-package blurbs) for use in pickers and info popovers. Absent for runtimes that haven't been curated yet; consumers MUST fall back to derived defaults in that case."
         }
       },
       "oneOf": [
         { "required": ["components"], "not": { "required": ["base"] } },
         { "required": ["base", "packs"], "not": { "required": ["components"] } }
       ]
+    },
+    "Ui": {
+      "type": "object",
+      "description": "Curated display copy for a runtime. All fields optional; consumers apply derived defaults when absent. Authored in e2b/<template>/ui.json and embedded verbatim by the registry generator.",
+      "additionalProperties": false,
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Short human label shown in pickers, badges, headers (e.g. 'Animation'). One or two words; Title Case; avoid 'Template'/'Runtime'."
+        },
+        "emoji": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8,
+          "description": "Single grapheme used as a quick visual identifier (e.g. '🎬'). Avoid flags or politically-loaded symbols."
+        },
+        "tagline": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "One-line value prop shown on the picker card. Frame as value, not feature list."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Multi-sentence body text for info popovers / detail pages. Two to four sentences: what it is, what's notable, when to pick it."
+        },
+        "capabilities": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "description": "Short capability chips. Noun phrases or product names; six is the sweet spot."
+        },
+        "packageOverrides": {
+          "type": "object",
+          "description": "Per-component or per-pack friendly text, keyed by component.name (base templates) or pack.id (variant templates). Unknown keys are an authoring error.",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 60,
+                "description": "Override of the technical name for display."
+              },
+              "blurb": {
+                "type": "string",
+                "maxLength": 200,
+                "description": "One friendly sentence aimed at a non-technical user. Skip the version — it's shown separately."
+              },
+              "technical": {
+                "type": "string",
+                "maxLength": 500,
+                "description": "Appendix-grade text for a 'show details' panel. Include version, key flags, operational caveats."
+              }
+            }
+          }
+        }
+      }
     },
     "PackEntry": {
       "type": "object",
