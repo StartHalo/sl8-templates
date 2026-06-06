@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-28T18:43:55Z",
-  "sourceCommit": "8fdc912006a9b5e462fbd314d0147c3b6ec48649",
+  "generatedAt": "2026-06-05T18:49:12Z",
+  "sourceCommit": "b27e64f6bab9a6bd2d650f52054f25f99f74eb5c",
   "templates": [
     {
       "name": "sl8-base",
@@ -68,9 +68,9 @@
     {
       "name": "sl8-animation",
       "status": "active",
-      "currentVersion": "v20260523-150356",
+      "currentVersion": "v20260605-181946",
       "aliases": {
-        "versioned": "sl8-animation-v20260523-150356",
+        "versioned": "sl8-animation-v20260605-181946",
         "generic": "sl8-animation"
       },
       "base": {
@@ -130,23 +130,48 @@
             "manimgl"
           ],
           "agentGuidance": "Two engines coexist. Manim CE — `manim -ql <file.py> <SceneClass>` (Cairo-based, headless, default for most agents). ManimGL — `xvfb-run -a manimgl <file.py> <SceneClass>` (OpenGL; the import itself opens a display, so any `manimgl` invocation or even `import manimlib` must be wrapped in `xvfb-run -a` or run with `DISPLAY` set — the xvfb pack provides this). Python import names differ: `import manim` vs `import manimlib`. Renders land in `./media/videos/<file>/<quality>/<SceneClass>.mp4` by default; pass `--media_dir /home/user/artifacts` to redirect into the artifacts mount. Use `-ql` (480p), `-qm` (720p), `-qh` (1080p) to trade speed for quality."
+        },
+        {
+          "id": "chrome-headless",
+          "version": "1.0.0",
+          "description": "Shared system libraries required to run a headless Chrome / Chrome Headless Shell on Debian Bookworm. Installs no browser binary — downstream packs (e.g. remotion) fetch their own Chrome.",
+          "provides": [
+            "chrome-headless-libs"
+          ],
+          "agentGuidance": "Provides the native shared libraries a headless Chromium needs (NSS, GBM/Mesa, ALSA, ATK + ATK-bridge, Cairo/Pango, X composite/damage/fixes/randr, CUPS, dbus). It installs NO browser binary — tools that drive headless Chrome (Remotion, Puppeteer, Playwright) must download or point at their own Chromium build; this pack only guarantees the OS-level .so dependencies resolve. If a render fails with `error while loading shared libraries: libXXX.so: cannot open shared object file`, the missing library belongs here."
+        },
+        {
+          "id": "remotion",
+          "version": "1.0.0",
+          "description": "Remotion CLI (React/HTML → MP4 video rendering) with a Chrome Headless Shell pre-downloaded at build time and exposed at a fixed, world-readable path so the non-root runtime user can render offline.",
+          "provides": [
+            "remotion"
+          ],
+          "agentGuidance": "Remotion renders React compositions to MP4 via headless Chrome. The CLI is installed globally (`remotion`). A Chrome Headless Shell is pre-downloaded to the fixed, world-readable path /opt/remotion/chrome-headless-shell (also exported as $CHROME_HEADLESS_SHELL in interactive shells), so renders work offline without the ~150MB first-run download. Remotion has NO env var for the browser path, so you MUST pass it explicitly with the literal path (env vars are not present in non-interactive `commands.run`): `remotion render <entry> <CompositionId> /home/user/artifacts/out.mp4 --browser-executable /opt/remotion/chrome-headless-shell`. Typical flow: scaffold or open a Remotion project (`package.json` with `remotion` + `src/index.ts` calling registerRoot, and a Root that registers <Composition> ids), `npm install`, then render with the flag above. Without `--browser-executable`, Remotion re-downloads Chrome into the project's node_modules/.remotion. System ffmpeg is present (the ffmpeg pack); Remotion also bundles its own. Domain knowledge lives in the `remotion-best-practices` skill (`skills add remotion-best-practices`) — 38 rule files on captions, audio, sequencing, transitions, fonts, etc."
         }
       ],
       "ui": {
         "displayName": "Animation",
         "emoji": "🎬",
-        "tagline": "Adds Python, Manim, ffmpeg, and LaTeX on top of General.",
-        "description": "Everything in General, plus the full Manim animation stack: Python 3.11, Manim Community Edition + ManimGL, ffmpeg, TeX Live, and Xvfb for headless GL rendering. Use this when your bot needs to render math or diagram videos.",
+        "tagline": "Adds Python, Manim, Remotion, ffmpeg, and LaTeX on top of General.",
+        "description": "Everything in General, plus a full code-to-video stack: Python 3.11, Manim Community Edition + ManimGL, Remotion (render React/HTML to MP4 via headless Chrome), ffmpeg, TeX Live, and Xvfb for headless GL rendering. Use this when your bot needs to render math/diagram animations or programmatic React video.",
         "capabilities": [
           "Claude Code",
           "Python 3.11",
           "Manim",
+          "Remotion",
           "ffmpeg",
           "LaTeX"
         ],
         "packageOverrides": {
           "manim": {
             "blurb": "Render math and diagram animations as MP4."
+          },
+          "remotion": {
+            "blurb": "Render React/HTML compositions to MP4 (Chrome Headless Shell pre-installed)."
+          },
+          "chrome-headless": {
+            "blurb": "Headless-Chrome system libraries that browser-based renderers depend on."
           },
           "ffmpeg": {
             "blurb": "Encode and convert video and audio."
