@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-05T18:49:12Z",
-  "sourceCommit": "b27e64f6bab9a6bd2d650f52054f25f99f74eb5c",
+  "generatedAt": "2026-06-07T03:31:18Z",
+  "sourceCommit": "d5e1efa3c357d9b68f16f21de205e1fd82d36a6b",
   "templates": [
     {
       "name": "sl8-base",
       "status": "active",
-      "currentVersion": "v20260522-175354",
+      "currentVersion": "v20260606-195505",
       "aliases": {
-        "versioned": "sl8-base-v20260522-175354",
+        "versioned": "sl8-base-v20260606-195505",
         "generic": "sl8-base"
       },
       "components": [
         {
           "name": "Node.js",
-          "version": "20.x"
+          "version": "22.x"
         },
         {
           "name": "@starthalo/ai-gen",
@@ -30,7 +30,7 @@
         },
         {
           "name": "pnpm",
-          "version": "10.33.4"
+          "version": "11.5.2"
         },
         {
           "name": "yarn",
@@ -68,14 +68,14 @@
     {
       "name": "sl8-animation",
       "status": "active",
-      "currentVersion": "v20260605-181946",
+      "currentVersion": "v20260606-195919",
       "aliases": {
-        "versioned": "sl8-animation-v20260605-181946",
+        "versioned": "sl8-animation-v20260606-195919",
         "generic": "sl8-animation"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260522-175354"
+        "version": "v20260606-195505"
       },
       "packs": [
         {
@@ -148,18 +148,28 @@
             "remotion"
           ],
           "agentGuidance": "Remotion renders React compositions to MP4 via headless Chrome. The CLI is installed globally (`remotion`). A Chrome Headless Shell is pre-downloaded to the fixed, world-readable path /opt/remotion/chrome-headless-shell (also exported as $CHROME_HEADLESS_SHELL in interactive shells), so renders work offline without the ~150MB first-run download. Remotion has NO env var for the browser path, so you MUST pass it explicitly with the literal path (env vars are not present in non-interactive `commands.run`): `remotion render <entry> <CompositionId> /home/user/artifacts/out.mp4 --browser-executable /opt/remotion/chrome-headless-shell`. Typical flow: scaffold or open a Remotion project (`package.json` with `remotion` + `src/index.ts` calling registerRoot, and a Root that registers <Composition> ids), `npm install`, then render with the flag above. Without `--browser-executable`, Remotion re-downloads Chrome into the project's node_modules/.remotion. System ffmpeg is present (the ffmpeg pack); Remotion also bundles its own. Domain knowledge lives in the `remotion-best-practices` skill (`skills add remotion-best-practices`) — 38 rule files on captions, audio, sequencing, transitions, fonts, etc."
+        },
+        {
+          "id": "hyperframes",
+          "version": "1.0.0",
+          "description": "HeyGen HyperFrames CLI (HTML/CSS/animations → deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. A Chrome build is pre-installed into the user's default Puppeteer cache so renders work offline.",
+          "provides": [
+            "hyperframes"
+          ],
+          "agentGuidance": "HeyGen HyperFrames renders HTML/CSS compositions to MP4 via headless Chrome (Puppeteer) + ffmpeg. The CLI is installed globally (`hyperframes`). Flow: `hyperframes init <dir>` to scaffold a project, edit the HTML composition + animation tracks, then `hyperframes render --output /home/user/artifacts/out.mp4` (add `--non-interactive` for agent/automated runs — no prompts). A Chrome build is pre-installed in the user's DEFAULT Puppeteer cache (/home/user/.cache/puppeteer), so Puppeteer resolves it offline with no env var (E2B `commands.run` does not inherit image ENV). Requires Node 22+ (this template's base provides it). System ffmpeg is present (the ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use the `hyperframes` skill (`skills add hyperframes`) for HyperFrames domain knowledge."
         }
       ],
       "ui": {
         "displayName": "Animation",
         "emoji": "🎬",
-        "tagline": "Adds Python, Manim, Remotion, ffmpeg, and LaTeX on top of General.",
-        "description": "Everything in General, plus a full code-to-video stack: Python 3.11, Manim Community Edition + ManimGL, Remotion (render React/HTML to MP4 via headless Chrome), ffmpeg, TeX Live, and Xvfb for headless GL rendering. Use this when your bot needs to render math/diagram animations or programmatic React video.",
+        "tagline": "Adds Python, Manim, Remotion, HyperFrames, ffmpeg, and LaTeX on top of General.",
+        "description": "Everything in General, plus a full code-to-video stack: Python 3.11, Manim Community Edition + ManimGL, Remotion (React/HTML → MP4), HeyGen HyperFrames (HTML/CSS → MP4), ffmpeg, TeX Live, and Xvfb for headless GL rendering. Runs on Node 22. Use this when your bot needs to render math/diagram animations or programmatic web video.",
         "capabilities": [
           "Claude Code",
           "Python 3.11",
           "Manim",
           "Remotion",
+          "HyperFrames",
           "ffmpeg",
           "LaTeX"
         ],
@@ -169,6 +179,9 @@
           },
           "remotion": {
             "blurb": "Render React/HTML compositions to MP4 (Chrome Headless Shell pre-installed)."
+          },
+          "hyperframes": {
+            "blurb": "HeyGen HyperFrames — render HTML/CSS compositions to MP4 (Chrome pre-installed; Node 22)."
           },
           "chrome-headless": {
             "blurb": "Headless-Chrome system libraries that browser-based renderers depend on."
