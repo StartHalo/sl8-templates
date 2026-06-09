@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-07T03:31:18Z",
-  "sourceCommit": "d5e1efa3c357d9b68f16f21de205e1fd82d36a6b",
+  "generatedAt": "2026-06-09T08:06:56Z",
+  "sourceCommit": "d377017762dedfb8e519f1a3bc1969bf211ca4e7",
   "templates": [
     {
       "name": "sl8-base",
@@ -43,6 +43,14 @@
         {
           "name": "gcsfuse",
           "version": "system"
+        }
+      ],
+      "coreSkills": [
+        {
+          "id": "ai-image-generation"
+        },
+        {
+          "id": "ai-video-generation"
         }
       ],
       "ui": {
@@ -157,6 +165,26 @@
             "hyperframes"
           ],
           "agentGuidance": "HeyGen HyperFrames renders HTML/CSS compositions to MP4 via headless Chrome (Puppeteer) + ffmpeg. The CLI is installed globally (`hyperframes`). Flow: `hyperframes init <dir>` to scaffold a project, edit the HTML composition + animation tracks, then `hyperframes render --output /home/user/artifacts/out.mp4` (add `--non-interactive` for agent/automated runs — no prompts). A Chrome build is pre-installed in the user's DEFAULT Puppeteer cache (/home/user/.cache/puppeteer), so Puppeteer resolves it offline with no env var (E2B `commands.run` does not inherit image ENV). Requires Node 22+ (this template's base provides it). System ffmpeg is present (the ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use the `hyperframes` skill (`skills add hyperframes`) for HyperFrames domain knowledge."
+        }
+      ],
+      "coreSkills": [
+        {
+          "id": "ai-image-generation"
+        },
+        {
+          "id": "ai-video-generation"
+        },
+        {
+          "id": "remotion-best-practices"
+        },
+        {
+          "id": "hyperframes"
+        },
+        {
+          "id": "manim-ce"
+        },
+        {
+          "id": "manim-gl"
         }
       ],
       "ui": {
