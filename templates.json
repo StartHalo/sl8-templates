@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-09T08:06:56Z",
-  "sourceCommit": "d377017762dedfb8e519f1a3bc1969bf211ca4e7",
+  "generatedAt": "2026-06-10T22:55:57Z",
+  "sourceCommit": "0d10350904b19b2b92cc590c9ecbd01e5bd5f9ce",
   "templates": [
     {
       "name": "sl8-base",
       "status": "active",
-      "currentVersion": "v20260606-195505",
+      "currentVersion": "v20260610-221640",
       "aliases": {
-        "versioned": "sl8-base-v20260606-195505",
+        "versioned": "sl8-base-v20260610-221640",
         "generic": "sl8-base"
       },
       "components": [
@@ -18,7 +18,7 @@
         },
         {
           "name": "@starthalo/ai-gen",
-          "version": "1.1.2"
+          "version": "2.0.0"
         },
         {
           "name": "@starthalo/skills-cli",
@@ -76,14 +76,14 @@
     {
       "name": "sl8-animation",
       "status": "active",
-      "currentVersion": "v20260606-195919",
+      "currentVersion": "v20260610-222400",
       "aliases": {
-        "versioned": "sl8-animation-v20260606-195919",
+        "versioned": "sl8-animation-v20260610-222400",
         "generic": "sl8-animation"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260606-195505"
+        "version": "v20260610-221640"
       },
       "packs": [
         {
@@ -216,6 +216,116 @@
           },
           "ffmpeg": {
             "blurb": "Encode and convert video and audio."
+          }
+        }
+      }
+    },
+    {
+      "name": "sl8-video",
+      "status": "active",
+      "currentVersion": "v20260610-222900",
+      "aliases": {
+        "versioned": "sl8-video-v20260610-222900",
+        "generic": "sl8-video"
+      },
+      "base": {
+        "template": "sl8-base",
+        "version": "v20260610-221640"
+      },
+      "packs": [
+        {
+          "id": "python-runtime",
+          "version": "1.0.0",
+          "description": "Python 3 + pip + venv + build tooling for native extensions.",
+          "provides": [
+            "python3",
+            "pip3",
+            "venv"
+          ],
+          "agentGuidance": "Python 3 is at `python3` (no unversioned `python`). Use `pip3 install --break-system-packages <pkg>` for system-wide installs (this image follows PEP 668), or `python3 -m venv .venv && source .venv/bin/activate` for a project-local venv. Native-extension build tools (build-essential, pkg-config, python3-dev) are present, so packages like Pillow, lxml, manim can compile from source if needed."
+        },
+        {
+          "id": "ffmpeg",
+          "version": "1.0.0",
+          "description": "FFmpeg for video/audio encoding and frame-to-MP4 assembly.",
+          "provides": [
+            "ffmpeg",
+            "ffprobe"
+          ],
+          "agentGuidance": "Use `ffmpeg -i <input> <output>` for transcoding, `ffmpeg -framerate <fps> -i frame_%04d.png out.mp4` for frame sequences, and `ffprobe -v quiet -print_format json -show_format -show_streams <file>` to inspect media. The Debian ffmpeg build includes the common codecs (libx264, libvpx, aac); use `-c:v libx264 -pix_fmt yuv420p` for broadly-compatible MP4 output."
+        },
+        {
+          "id": "fonts",
+          "version": "1.0.0",
+          "description": "Curated font set for video caption rendering: DejaVu family (Sans, Sans Oblique, Serif Italic at guaranteed paths) + Comic Neue (OFL casual/handwriting), with fontconfig (fc-list/fc-match) for discovery.",
+          "provides": [
+            "fc-list",
+            "fc-match",
+            "DejaVu Sans",
+            "DejaVu Serif",
+            "Comic Neue"
+          ],
+          "agentGuidance": "Fonts are pre-installed — do NOT probe the filesystem for them. Guaranteed TTF paths for ffmpeg drawtext fontfile=: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf (clean sans, default choice), /usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf (sans oblique), /usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf (serif italic). Casual/handwriting: Comic Neue (OFL; ships as OTF, e.g. ComicNeue-Regular.otf) — resolve the exact file with `fc-match -f '%{file}' 'Comic Neue'` rather than hardcoding a path. `fc-list` enumerates everything installed. ffmpeg's drawtext is built with fontconfig, so `font='Comic Neue'` works as an alternative to fontfile=."
+        },
+        {
+          "id": "imagemagick",
+          "version": "1.0.0",
+          "description": "ImageMagick 6 (convert, identify, montage, mogrify) for raster image manipulation and animated GIF assembly from PNG frames.",
+          "provides": [
+            "convert",
+            "identify",
+            "montage",
+            "mogrify"
+          ],
+          "agentGuidance": "Debian ships the ImageMagick 6.x series: the entry point is `convert` (plus `identify`, `montage`, `mogrify`) — there is NO `magick` binary, do not call it. Assemble animated GIFs from PNG frames with `convert -delay 20 -loop 0 frame-*.png out.gif` (delay is in 1/100ths of a second; -loop 0 = infinite). Inspect images with `identify <file>` (one line per GIF frame). Raster formats (PNG/JPEG/GIF/WebP) are unrestricted; the default security policy only limits ghostscript-backed coders like PDF/PS."
+        },
+        {
+          "id": "jq",
+          "version": "1.0.0",
+          "description": "jq — command-line JSON processor for parsing and transforming JSON in shell pipelines.",
+          "provides": [
+            "jq"
+          ],
+          "agentGuidance": "Use `jq` to parse JSON in shell scripts — e.g. `ffprobe -v error -print_format json -show_format -show_streams in.mp4 | jq -r '.format.duration'`. `-e` makes the exit code follow the filter's truthiness (use it for assertions); `-r` prints raw strings without quotes. `sl8-capabilities | jq '.packs[].id'` lists this sandbox's installed packs."
+        }
+      ],
+      "coreSkills": [
+        {
+          "id": "ai-image-generation"
+        },
+        {
+          "id": "ai-video-generation"
+        }
+      ],
+      "ui": {
+        "displayName": "Video",
+        "emoji": "🎞️",
+        "tagline": "Adds ffmpeg, ImageMagick, caption fonts, jq, and Python for local video assembly on top of General.",
+        "description": "Everything in General, plus a local video-assembly toolchain: ffmpeg/ffprobe with the full normalize-concat-caption feature set (zoompan, drawtext, concat demuxer, anoisesrc/amix audio beds), ImageMagick for animated GIF assembly, a curated caption-font set (DejaVu family + Comic Neue at guaranteed paths), jq, and Python 3.11. Generation stays remote via ai-gen — pick this when a bot needs to cut, normalize, caption, and package clips into finished MP4s.",
+        "capabilities": [
+          "Claude Code",
+          "AI Gen",
+          "ffmpeg",
+          "ImageMagick",
+          "Caption fonts",
+          "jq",
+          "Python 3.11"
+        ],
+        "packageOverrides": {
+          "ffmpeg": {
+            "blurb": "Cut, normalize, caption, and stitch clips into finished MP4s."
+          },
+          "imagemagick": {
+            "blurb": "Assemble PNG frames into animated GIFs and inspect or convert images."
+          },
+          "fonts": {
+            "blurb": "DejaVu and Comic Neue fonts at known paths, ready for caption cards."
+          },
+          "jq": {
+            "blurb": "Parse and transform JSON right in the shell."
+          },
+          "python-runtime": {
+            "blurb": "Python 3.11 with pip and venv for scripting and data wrangling."
           }
         }
       }
