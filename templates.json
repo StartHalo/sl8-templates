@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-10T22:55:57Z",
-  "sourceCommit": "0d10350904b19b2b92cc590c9ecbd01e5bd5f9ce",
+  "generatedAt": "2026-06-12T20:25:55Z",
+  "sourceCommit": "5fffa8317532ffd11e8095ffad88865076cb570d",
   "templates": [
     {
       "name": "sl8-base",
       "status": "active",
-      "currentVersion": "v20260610-221640",
+      "currentVersion": "v20260612-195857",
       "aliases": {
-        "versioned": "sl8-base-v20260610-221640",
+        "versioned": "sl8-base-v20260612-195857",
         "generic": "sl8-base"
       },
       "components": [
@@ -18,7 +18,7 @@
         },
         {
           "name": "@starthalo/ai-gen",
-          "version": "2.0.0"
+          "version": "2.1.0"
         },
         {
           "name": "@starthalo/skills-cli",
@@ -76,14 +76,14 @@
     {
       "name": "sl8-animation",
       "status": "active",
-      "currentVersion": "v20260610-222400",
+      "currentVersion": "v20260612-200159",
       "aliases": {
-        "versioned": "sl8-animation-v20260610-222400",
+        "versioned": "sl8-animation-v20260612-200159",
         "generic": "sl8-animation"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260610-221640"
+        "version": "v20260612-195857"
       },
       "packs": [
         {
@@ -223,14 +223,14 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260610-222900",
+      "currentVersion": "v20260612-200159",
       "aliases": {
-        "versioned": "sl8-video-v20260610-222900",
+        "versioned": "sl8-video-v20260612-200159",
         "generic": "sl8-video"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260610-221640"
+        "version": "v20260612-195857"
       },
       "packs": [
         {
