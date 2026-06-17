@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T20:25:55Z",
-  "sourceCommit": "5fffa8317532ffd11e8095ffad88865076cb570d",
+  "generatedAt": "2026-06-16T17:46:27Z",
+  "sourceCommit": "4306d0ba71abafce191904c75fc6b5538fd32b86",
   "templates": [
     {
       "name": "sl8-base",
@@ -43,14 +43,6 @@
         {
           "name": "gcsfuse",
           "version": "system"
-        }
-      ],
-      "coreSkills": [
-        {
-          "id": "ai-image-generation"
-        },
-        {
-          "id": "ai-video-generation"
         }
       ],
       "ui": {
@@ -167,26 +159,6 @@
           "agentGuidance": "HeyGen HyperFrames renders HTML/CSS compositions to MP4 via headless Chrome (Puppeteer) + ffmpeg. The CLI is installed globally (`hyperframes`). Flow: `hyperframes init <dir>` to scaffold a project, edit the HTML composition + animation tracks, then `hyperframes render --output /home/user/artifacts/out.mp4` (add `--non-interactive` for agent/automated runs — no prompts). A Chrome build is pre-installed in the user's DEFAULT Puppeteer cache (/home/user/.cache/puppeteer), so Puppeteer resolves it offline with no env var (E2B `commands.run` does not inherit image ENV). Requires Node 22+ (this template's base provides it). System ffmpeg is present (the ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use the `hyperframes` skill (`skills add hyperframes`) for HyperFrames domain knowledge."
         }
       ],
-      "coreSkills": [
-        {
-          "id": "ai-image-generation"
-        },
-        {
-          "id": "ai-video-generation"
-        },
-        {
-          "id": "remotion-best-practices"
-        },
-        {
-          "id": "hyperframes"
-        },
-        {
-          "id": "manim-ce"
-        },
-        {
-          "id": "manim-gl"
-        }
-      ],
       "ui": {
         "displayName": "Animation",
         "emoji": "🎬",
@@ -287,14 +259,6 @@
             "jq"
           ],
           "agentGuidance": "Use `jq` to parse JSON in shell scripts — e.g. `ffprobe -v error -print_format json -show_format -show_streams in.mp4 | jq -r '.format.duration'`. `-e` makes the exit code follow the filter's truthiness (use it for assertions); `-r` prints raw strings without quotes. `sl8-capabilities | jq '.packs[].id'` lists this sandbox's installed packs."
-        }
-      ],
-      "coreSkills": [
-        {
-          "id": "ai-image-generation"
-        },
-        {
-          "id": "ai-video-generation"
         }
       ],
       "ui": {

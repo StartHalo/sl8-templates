@@ -117,25 +117,6 @@
           "description": "Tool packs layered on top of the base, in install order. Mutually exclusive with `components`.",
           "items": { "$ref": "#/$defs/PackEntry" }
         },
-        "coreSkills": {
-          "type": "array",
-          "description": "Registry skills paired with this template's tooling (a DECLARATION, not an install — skills stay on-demand). For a variant this is the effective set = base's coreSkills ∪ the variant's own. Consumers: bot-cli runtimes (author discovery), the server's clone-time skill install, webapp pickers.",
-          "items": {
-            "type": "object",
-            "required": ["id"],
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "string",
-                "description": "Registry skill id (kebab-case), installable via `skills add <id>`."
-              },
-              "version": {
-                "type": "string",
-                "description": "Optional pinned version; absent means latest."
-              }
-            }
-          }
-        },
         "ui": {
           "$ref": "#/$defs/Ui",
           "description": "Optional curated display copy (name, emoji, tagline, capability chips, per-package blurbs) for use in pickers and info popovers. Absent for runtimes that haven't been curated yet; consumers MUST fall back to derived defaults in that case."
