@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-16T17:46:27Z",
-  "sourceCommit": "4306d0ba71abafce191904c75fc6b5538fd32b86",
+  "generatedAt": "2026-06-18T22:29:22Z",
+  "sourceCommit": "3a211a75509997ac77fe13c9d798a4e66ef0123a",
   "templates": [
     {
       "name": "sl8-base",
@@ -68,9 +68,9 @@
     {
       "name": "sl8-animation",
       "status": "active",
-      "currentVersion": "v20260612-200159",
+      "currentVersion": "v20260618-210512",
       "aliases": {
-        "versioned": "sl8-animation-v20260612-200159",
+        "versioned": "sl8-animation-v20260618-210512",
         "generic": "sl8-animation"
       },
       "base": {
@@ -151,12 +151,30 @@
         },
         {
           "id": "hyperframes",
-          "version": "1.0.0",
-          "description": "HeyGen HyperFrames CLI (HTML/CSS/animations → deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. A Chrome build is pre-installed into the user's default Puppeteer cache so renders work offline.",
+          "version": "1.1.0",
+          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP → deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. A PINNED Chrome is pre-installed and its path is frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink) so renders run offline with no per-run download. Local-only/keyless render core: voiceover/captions/background-removal are produced via AI Gen (not bundled local weights); HeyGen cloud features and @hyperframes/aws-lambda are excluded.",
           "provides": [
             "hyperframes"
           ],
-          "agentGuidance": "HeyGen HyperFrames renders HTML/CSS compositions to MP4 via headless Chrome (Puppeteer) + ffmpeg. The CLI is installed globally (`hyperframes`). Flow: `hyperframes init <dir>` to scaffold a project, edit the HTML composition + animation tracks, then `hyperframes render --output /home/user/artifacts/out.mp4` (add `--non-interactive` for agent/automated runs — no prompts). A Chrome build is pre-installed in the user's DEFAULT Puppeteer cache (/home/user/.cache/puppeteer), so Puppeteer resolves it offline with no env var (E2B `commands.run` does not inherit image ENV). Requires Node 22+ (this template's base provides it). System ffmpeg is present (the ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use the `hyperframes` skill (`skills add hyperframes`) for HyperFrames domain knowledge."
+          "agentGuidance": "HeyGen HyperFrames renders HTML/CSS/GSAP compositions to MP4 via headless Chrome (Puppeteer beginFrame seeking) + ffmpeg. The CLI is global (`hyperframes`). Flow: `hyperframes init <dir> --non-interactive` to scaffold, edit the composition + animation tracks, then `hyperframes render --output /home/user/artifacts/out.mp4 --non-interactive`. CHROME (pinned, offline): a pinned Chrome is pre-staged; its absolute path is frozen at /etc/sl8/chrome-path and as the /opt/chrome/chrome symlink. `hyperframes doctor` auto-detects it; if a command needs it explicitly, pass `--chrome \"$(cat /etc/sl8/chrome-path)\"`. Do NOT trigger a Puppeteer/Chrome download and do NOT rely on image ENV (E2B `commands.run` does not inherit it). GSAP: vendor GSAP into the composition — do not depend on a render-time CDN fetch (cdn.jsdelivr.net). MEDIA (voiceover/captions/background-removal are NOT local — use AI Gen, keyless via the SL8 proxy): voiceover → `ai-gen audio tts \"<text>\" -m fal-ai/kokoro/american-english`; captions/timing → `ai-gen transcribe <audio>` (or `ai-gen audio stt <audio> -m fal-ai/wizper`); background removal → `ai-gen run fal-ai/bria/background/remove --image <img>`. Generate the asset with ai-gen, then reference the produced audio/image file in the composition / pass it to `hyperframes render`. Pillow is installed for local image preprocessing. EXCLUDED: HeyGen credentials, avatars, cloud/lambda/cloudrun render, `publish`, premium TTS/BGM, and @hyperframes/aws-lambda — never used. Requires Node 22+ (the base provides it); system ffmpeg is present (ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use `skills add hyperframes` for HyperFrames domain knowledge."
+        },
+        {
+          "id": "fonts",
+          "version": "1.1.0",
+          "description": "Curated font set for caption/composition rendering: DejaVu family (Sans, Sans Oblique, Serif Italic at guaranteed paths) + Comic Neue (OFL casual), plus an embeddable OFL webfont pack (Inter, Outfit, Fraunces, Anton, Space Grotesk) for legible, consistent HyperFrames/video compositions. fontconfig (fc-list/fc-match) for discovery.",
+          "provides": [
+            "fc-list",
+            "fc-match",
+            "DejaVu Sans",
+            "DejaVu Serif",
+            "Comic Neue",
+            "Inter",
+            "Outfit",
+            "Fraunces",
+            "Anton",
+            "Space Grotesk"
+          ],
+          "agentGuidance": "Fonts are pre-installed — do NOT probe the filesystem or fetch fonts at runtime. Guaranteed TTF paths for ffmpeg drawtext fontfile=: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf (clean sans, default), /usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf (sans oblique), /usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf (serif italic). Casual/handwriting: Comic Neue (OFL; resolve with `fc-match -f '%{file}' 'Comic Neue'`). Embeddable webfonts for compositions (HyperFrames HTML/CSS or ffmpeg drawtext font='...'): Inter, Outfit, Fraunces, Anton, Space Grotesk — installed under /usr/share/fonts/truetype/sl8-webfonts and registered with fontconfig, so reference by family name (e.g. `font='Inter'`) or resolve a file with `fc-match -f '%{file}' 'Outfit'`. `fc-list` enumerates everything installed. ffmpeg's drawtext is built with fontconfig, so family names work as an alternative to fontfile=."
         }
       ],
       "ui": {
@@ -181,7 +199,10 @@
             "blurb": "Render React/HTML compositions to MP4 (Chrome Headless Shell pre-installed)."
           },
           "hyperframes": {
-            "blurb": "HeyGen HyperFrames — render HTML/CSS compositions to MP4 (Chrome pre-installed; Node 22)."
+            "blurb": "HeyGen HyperFrames — render HTML/CSS/GSAP compositions to MP4 (pinned Chrome at /etc/sl8/chrome-path, Pillow; voiceover/captions/background-removal via ai-gen; Node 22)."
+          },
+          "fonts": {
+            "blurb": "Embeddable webfonts (Inter, Outfit, Fraunces, Anton, Space Grotesk) plus DejaVu/Comic-Neue for legible compositions."
           },
           "chrome-headless": {
             "blurb": "Headless-Chrome system libraries that browser-based renderers depend on."
@@ -195,9 +216,9 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260612-200159",
+      "currentVersion": "v20260618-210512",
       "aliases": {
-        "versioned": "sl8-video-v20260612-200159",
+        "versioned": "sl8-video-v20260618-210512",
         "generic": "sl8-video"
       },
       "base": {
@@ -228,16 +249,21 @@
         },
         {
           "id": "fonts",
-          "version": "1.0.0",
-          "description": "Curated font set for video caption rendering: DejaVu family (Sans, Sans Oblique, Serif Italic at guaranteed paths) + Comic Neue (OFL casual/handwriting), with fontconfig (fc-list/fc-match) for discovery.",
+          "version": "1.1.0",
+          "description": "Curated font set for caption/composition rendering: DejaVu family (Sans, Sans Oblique, Serif Italic at guaranteed paths) + Comic Neue (OFL casual), plus an embeddable OFL webfont pack (Inter, Outfit, Fraunces, Anton, Space Grotesk) for legible, consistent HyperFrames/video compositions. fontconfig (fc-list/fc-match) for discovery.",
           "provides": [
             "fc-list",
             "fc-match",
             "DejaVu Sans",
             "DejaVu Serif",
-            "Comic Neue"
+            "Comic Neue",
+            "Inter",
+            "Outfit",
+            "Fraunces",
+            "Anton",
+            "Space Grotesk"
           ],
-          "agentGuidance": "Fonts are pre-installed — do NOT probe the filesystem for them. Guaranteed TTF paths for ffmpeg drawtext fontfile=: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf (clean sans, default choice), /usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf (sans oblique), /usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf (serif italic). Casual/handwriting: Comic Neue (OFL; ships as OTF, e.g. ComicNeue-Regular.otf) — resolve the exact file with `fc-match -f '%{file}' 'Comic Neue'` rather than hardcoding a path. `fc-list` enumerates everything installed. ffmpeg's drawtext is built with fontconfig, so `font='Comic Neue'` works as an alternative to fontfile=."
+          "agentGuidance": "Fonts are pre-installed — do NOT probe the filesystem or fetch fonts at runtime. Guaranteed TTF paths for ffmpeg drawtext fontfile=: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf (clean sans, default), /usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf (sans oblique), /usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf (serif italic). Casual/handwriting: Comic Neue (OFL; resolve with `fc-match -f '%{file}' 'Comic Neue'`). Embeddable webfonts for compositions (HyperFrames HTML/CSS or ffmpeg drawtext font='...'): Inter, Outfit, Fraunces, Anton, Space Grotesk — installed under /usr/share/fonts/truetype/sl8-webfonts and registered with fontconfig, so reference by family name (e.g. `font='Inter'`) or resolve a file with `fc-match -f '%{file}' 'Outfit'`. `fc-list` enumerates everything installed. ffmpeg's drawtext is built with fontconfig, so family names work as an alternative to fontfile=."
         },
         {
           "id": "imagemagick",
@@ -283,7 +309,7 @@
             "blurb": "Assemble PNG frames into animated GIFs and inspect or convert images."
           },
           "fonts": {
-            "blurb": "DejaVu and Comic Neue fonts at known paths, ready for caption cards."
+            "blurb": "DejaVu + Comic Neue + embeddable webfonts (Inter, Outfit, Fraunces, Anton, Space Grotesk) at known paths, ready for caption cards."
           },
           "jq": {
             "blurb": "Parse and transform JSON right in the shell."
