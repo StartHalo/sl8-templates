@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-22T17:31:11Z",
+  "generatedAt": "2026-07-22T19:37:16Z",
   "sourceCommit": "74876e4008232454ad19c0a822051b0113f55345",
   "templates": [
     {
@@ -216,9 +216,9 @@
     {
       "name": "sl8-motion",
       "status": "active",
-      "currentVersion": "v20260722-172219",
+      "currentVersion": "v20260722-192849",
       "aliases": {
-        "versioned": "sl8-motion-v20260722-172219",
+        "versioned": "sl8-motion-v20260722-192849",
         "generic": "sl8-motion"
       },
       "base": {
@@ -285,12 +285,12 @@
         },
         {
           "id": "hyperframes-suite",
-          "version": "1.0.0",
-          "description": "Bakes the hyperframes-studio skill suite (locked registry pins) into /home/user/.claude/skills and pre-warms the npx cache for the project-pinned hyperframes CLI — the studio template rule: sessions never re-install what every session needs. Suite source of truth: studio/hyperframes-studio/releases/vN/suite.lock.json; refresh = new template version. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "version": "1.1.0",
+          "description": "Bakes the hyperframes-studio skill suite (locked registry pins, incl. the 5-skill motion-quality DOCTRINE chain) into /home/user/.claude/skills and pre-warms the npx cache for the project-pinned hyperframes CLI — the studio template rule: sessions never re-install what every session needs. Suite source of truth: studio/hyperframes-studio/releases/vN/suite.lock.json; refresh = new template version. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite"
           ],
-          "agentGuidance": "The studio skill suite is PRE-INSTALLED at /home/user/.claude/skills (router `hyperframes` + 8 domain skills + the motion-graphics workflow) — do NOT reinstall it; start every video/motion request at the /hyperframes router skill. Other workflow skills install lazily when the router routes to them (`skills add <workflow>` — needs GITHUB_TOKEN in the session env). The hyperframes CLI npx cache is pre-warmed: render via the project-pinned form (`npx --yes hyperframes@<pinned> render ...` or the scaffolded `npm run render`) with no download wait. OFFLINE CLOSURE (the studio rule): strip Google Fonts links (the 0.7.x compiler auto-fetches them otherwise), map families to the packed fonts (Inter/Outfit/Fraunces/Anton/Space Grotesk), declare `@font-face { font-family: 'X'; src: local('X') }` INSIDE each composition's [data-composition-id] wrapper, and treat `hyperframes check` exit 0 with zero 'Fetched ... from Google Fonts' compiler lines as the closure oracle."
+          "agentGuidance": "The studio skill suite is PRE-INSTALLED at /home/user/.claude/skills (the /hyperframes router, the motion-graphics workflow, 8 domain skills, AND the 5-skill motion-quality doctrine chain: motion-doctrine — load it FIRST for any motion work, its rules supersede generic motion guidance — plus cut-the-curve, seam-craft, oversized-cursor, captions-overlay). Do NOT reinstall; start every video/motion request at the /hyperframes router. STEP DISCIPLINE (non-negotiable): follow the routed workflow's numbered steps exactly — DISPATCH the workflow's sub-agents where the runbook says dispatch (e.g. motion-graphics: Director Part 1 → source → Director Part 2 → Builder → verify, each a Task dispatch), leave every step's artifact on disk (shot-plan.json, compositions/index.html, snapshots/contact-sheet.jpg), and run the snapshot proof BEFORE render. Autonomous mode means checkpoint summaries, never skipped steps. PROJECT ROOT: map the workflow's PROJECT_DIR under /home/user/artifacts/<project>/ (one folder per project). Other workflow skills install lazily on route (`skills add <workflow>`, needs GITHUB_TOKEN). The hyperframes CLI npx cache is pre-warmed: render via the project-pinned form (`npx --yes hyperframes@<pinned> render ...`). OFFLINE CLOSURE: strip Google Fonts links (0.7.x auto-fetches otherwise), map families to the packed fonts (Inter/Outfit/Fraunces/Anton/Space Grotesk), declare `@font-face { src: local('X') }` INSIDE each composition's [data-composition-id] wrapper; closure oracle = `check` exit 0 with zero 'Fetched ... from Google Fonts' compiler lines."
         }
       ],
       "ui": {
