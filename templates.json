@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-11T18:48:18Z",
-  "sourceCommit": "dde63409b91653725db213548185c77c223f172d",
+  "generatedAt": "2026-07-21T23:56:51Z",
+  "sourceCommit": "74876e4008232454ad19c0a822051b0113f55345",
   "templates": [
     {
       "name": "sl8-base",
@@ -151,12 +151,12 @@
         },
         {
           "id": "hyperframes",
-          "version": "1.1.0",
-          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP → deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. A PINNED Chrome is pre-installed and its path is frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink) so renders run offline with no per-run download. Local-only/keyless render core: voiceover/captions/background-removal are produced via AI Gen (not bundled local weights); HeyGen cloud features and @hyperframes/aws-lambda are excluded.",
+          "version": "1.2.0",
+          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP → deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. Ships the 0.7.x CLI generation (adds the unified `check` verification gate: lint + headless-browser runtime/layout/motion/contrast audit in one pass). A PINNED Chrome is pre-installed and its path is frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink) so renders run offline with no per-run download. Local-only/keyless render core: voiceover/captions/background-removal are produced via AI Gen (not bundled local weights); HeyGen cloud features and @hyperframes/aws-lambda are excluded.",
           "provides": [
             "hyperframes"
           ],
-          "agentGuidance": "HeyGen HyperFrames renders HTML/CSS/GSAP compositions to MP4 via headless Chrome (Puppeteer beginFrame seeking) + ffmpeg. The CLI is global (`hyperframes`). Flow: `hyperframes init <dir> --non-interactive` to scaffold, edit the composition + animation tracks, then `hyperframes render --output /home/user/artifacts/out.mp4 --non-interactive`. CHROME (pinned, offline): a pinned Chrome is pre-staged; its absolute path is frozen at /etc/sl8/chrome-path and as the /opt/chrome/chrome symlink. `hyperframes doctor` auto-detects it; if a command needs it explicitly, pass `--chrome \"$(cat /etc/sl8/chrome-path)\"`. Do NOT trigger a Puppeteer/Chrome download and do NOT rely on image ENV (E2B `commands.run` does not inherit it). GSAP: vendor GSAP into the composition — do not depend on a render-time CDN fetch (cdn.jsdelivr.net). MEDIA (voiceover/captions/background-removal are NOT local — use AI Gen, keyless via the SL8 proxy): voiceover → `ai-gen audio tts \"<text>\" -m fal-ai/kokoro/american-english`; captions/timing → `ai-gen transcribe <audio>` (or `ai-gen audio stt <audio> -m fal-ai/wizper`); background removal → `ai-gen run fal-ai/bria/background/remove --image <img>`. Generate the asset with ai-gen, then reference the produced audio/image file in the composition / pass it to `hyperframes render`. Pillow is installed for local image preprocessing. EXCLUDED: HeyGen credentials, avatars, cloud/lambda/cloudrun render, `publish`, premium TTS/BGM, and @hyperframes/aws-lambda — never used. Requires Node 22+ (the base provides it); system ffmpeg is present (ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use `skills add hyperframes` for HyperFrames domain knowledge."
+          "agentGuidance": "HeyGen HyperFrames renders HTML/CSS/GSAP compositions to MP4 via headless Chrome (Puppeteer beginFrame seeking) + ffmpeg. The CLI is global (`hyperframes`). Flow: `hyperframes init <dir> --non-interactive` to scaffold, edit the composition + animation tracks, verify with `hyperframes check` (the canonical gate: lint + headless-browser runtime/layout/motion/WCAG audit; exit 0 required), then `hyperframes render --output /home/user/artifacts/out.mp4 --non-interactive`. CHROME (pinned, offline): a pinned Chrome is pre-staged; its absolute path is frozen at /etc/sl8/chrome-path and as the /opt/chrome/chrome symlink. `hyperframes doctor` auto-detects it; if a command needs it explicitly, pass `--chrome \"$(cat /etc/sl8/chrome-path)\"`. Do NOT trigger a Puppeteer/Chrome download and do NOT rely on image ENV (E2B `commands.run` does not inherit it). GSAP: vendor GSAP into the composition — do not depend on a render-time CDN fetch (cdn.jsdelivr.net). MEDIA (voiceover/captions/background-removal are NOT local — use AI Gen, keyless via the SL8 proxy): voiceover → `ai-gen audio tts \"<text>\" -m fal-ai/kokoro/american-english`; captions/timing → `ai-gen transcribe <audio>` (or `ai-gen audio stt <audio> -m fal-ai/wizper`); background removal → `ai-gen run fal-ai/bria/background/remove --image <img>`. Generate the asset with ai-gen, then reference the produced audio/image file in the composition / pass it to `hyperframes render`. Pillow is installed for local image preprocessing. EXCLUDED: HeyGen credentials, avatars, cloud/lambda/cloudrun render, `publish`, premium TTS/BGM, and @hyperframes/aws-lambda — never used. Requires Node 22+ (the base provides it); system ffmpeg is present (ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use `skills add hyperframes` for HyperFrames domain knowledge."
         },
         {
           "id": "fonts",
@@ -209,6 +209,109 @@
           },
           "ffmpeg": {
             "blurb": "Encode and convert video and audio."
+          }
+        }
+      }
+    },
+    {
+      "name": "sl8-motion",
+      "status": "active",
+      "currentVersion": "v20260721-233548",
+      "aliases": {
+        "versioned": "sl8-motion-v20260721-233548",
+        "generic": "sl8-motion"
+      },
+      "base": {
+        "template": "sl8-base",
+        "version": "v20260711-011211"
+      },
+      "packs": [
+        {
+          "id": "python-runtime",
+          "version": "1.0.0",
+          "description": "Python 3 + pip + venv + build tooling for native extensions.",
+          "provides": [
+            "python3",
+            "pip3",
+            "venv"
+          ],
+          "agentGuidance": "Python 3 is at `python3` (no unversioned `python`). Use `pip3 install --break-system-packages <pkg>` for system-wide installs (this image follows PEP 668), or `python3 -m venv .venv && source .venv/bin/activate` for a project-local venv. Native-extension build tools (build-essential, pkg-config, python3-dev) are present, so packages like Pillow, lxml, manim can compile from source if needed."
+        },
+        {
+          "id": "ffmpeg",
+          "version": "1.0.0",
+          "description": "FFmpeg for video/audio encoding and frame-to-MP4 assembly.",
+          "provides": [
+            "ffmpeg",
+            "ffprobe"
+          ],
+          "agentGuidance": "Use `ffmpeg -i <input> <output>` for transcoding, `ffmpeg -framerate <fps> -i frame_%04d.png out.mp4` for frame sequences, and `ffprobe -v quiet -print_format json -show_format -show_streams <file>` to inspect media. The Debian ffmpeg build includes the common codecs (libx264, libvpx, aac); use `-c:v libx264 -pix_fmt yuv420p` for broadly-compatible MP4 output."
+        },
+        {
+          "id": "fonts",
+          "version": "1.1.0",
+          "description": "Curated font set for caption/composition rendering: DejaVu family (Sans, Sans Oblique, Serif Italic at guaranteed paths) + Comic Neue (OFL casual), plus an embeddable OFL webfont pack (Inter, Outfit, Fraunces, Anton, Space Grotesk) for legible, consistent HyperFrames/video compositions. fontconfig (fc-list/fc-match) for discovery.",
+          "provides": [
+            "fc-list",
+            "fc-match",
+            "DejaVu Sans",
+            "DejaVu Serif",
+            "Comic Neue",
+            "Inter",
+            "Outfit",
+            "Fraunces",
+            "Anton",
+            "Space Grotesk"
+          ],
+          "agentGuidance": "Fonts are pre-installed — do NOT probe the filesystem or fetch fonts at runtime. Guaranteed TTF paths for ffmpeg drawtext fontfile=: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf (clean sans, default), /usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf (sans oblique), /usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf (serif italic). Casual/handwriting: Comic Neue (OFL; resolve with `fc-match -f '%{file}' 'Comic Neue'`). Embeddable webfonts for compositions (HyperFrames HTML/CSS or ffmpeg drawtext font='...'): Inter, Outfit, Fraunces, Anton, Space Grotesk — installed under /usr/share/fonts/truetype/sl8-webfonts and registered with fontconfig, so reference by family name (e.g. `font='Inter'`) or resolve a file with `fc-match -f '%{file}' 'Outfit'`. `fc-list` enumerates everything installed. ffmpeg's drawtext is built with fontconfig, so family names work as an alternative to fontfile=."
+        },
+        {
+          "id": "chrome-headless",
+          "version": "1.0.0",
+          "description": "Shared system libraries required to run a headless Chrome / Chrome Headless Shell on Debian Bookworm. Installs no browser binary — downstream packs (e.g. remotion) fetch their own Chrome.",
+          "provides": [
+            "chrome-headless-libs"
+          ],
+          "agentGuidance": "Provides the native shared libraries a headless Chromium needs (NSS, GBM/Mesa, ALSA, ATK + ATK-bridge, Cairo/Pango, X composite/damage/fixes/randr, CUPS, dbus). It installs NO browser binary — tools that drive headless Chrome (Remotion, Puppeteer, Playwright) must download or point at their own Chromium build; this pack only guarantees the OS-level .so dependencies resolve. If a render fails with `error while loading shared libraries: libXXX.so: cannot open shared object file`, the missing library belongs here."
+        },
+        {
+          "id": "hyperframes",
+          "version": "1.2.0",
+          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP → deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. Ships the 0.7.x CLI generation (adds the unified `check` verification gate: lint + headless-browser runtime/layout/motion/contrast audit in one pass). A PINNED Chrome is pre-installed and its path is frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink) so renders run offline with no per-run download. Local-only/keyless render core: voiceover/captions/background-removal are produced via AI Gen (not bundled local weights); HeyGen cloud features and @hyperframes/aws-lambda are excluded.",
+          "provides": [
+            "hyperframes"
+          ],
+          "agentGuidance": "HeyGen HyperFrames renders HTML/CSS/GSAP compositions to MP4 via headless Chrome (Puppeteer beginFrame seeking) + ffmpeg. The CLI is global (`hyperframes`). Flow: `hyperframes init <dir> --non-interactive` to scaffold, edit the composition + animation tracks, verify with `hyperframes check` (the canonical gate: lint + headless-browser runtime/layout/motion/WCAG audit; exit 0 required), then `hyperframes render --output /home/user/artifacts/out.mp4 --non-interactive`. CHROME (pinned, offline): a pinned Chrome is pre-staged; its absolute path is frozen at /etc/sl8/chrome-path and as the /opt/chrome/chrome symlink. `hyperframes doctor` auto-detects it; if a command needs it explicitly, pass `--chrome \"$(cat /etc/sl8/chrome-path)\"`. Do NOT trigger a Puppeteer/Chrome download and do NOT rely on image ENV (E2B `commands.run` does not inherit it). GSAP: vendor GSAP into the composition — do not depend on a render-time CDN fetch (cdn.jsdelivr.net). MEDIA (voiceover/captions/background-removal are NOT local — use AI Gen, keyless via the SL8 proxy): voiceover → `ai-gen audio tts \"<text>\" -m fal-ai/kokoro/american-english`; captions/timing → `ai-gen transcribe <audio>` (or `ai-gen audio stt <audio> -m fal-ai/wizper`); background removal → `ai-gen run fal-ai/bria/background/remove --image <img>`. Generate the asset with ai-gen, then reference the produced audio/image file in the composition / pass it to `hyperframes render`. Pillow is installed for local image preprocessing. EXCLUDED: HeyGen credentials, avatars, cloud/lambda/cloudrun render, `publish`, premium TTS/BGM, and @hyperframes/aws-lambda — never used. Requires Node 22+ (the base provides it); system ffmpeg is present (ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use `skills add hyperframes` for HyperFrames domain knowledge."
+        }
+      ],
+      "ui": {
+        "displayName": "Motion Studio",
+        "emoji": "🎞️",
+        "tagline": "The hyperframes-studio machine: HyperFrames 0.7.x, pinned offline Chrome, fonts, ffmpeg.",
+        "description": "The Studio mechanism's motion machine — HeyGen HyperFrames 0.7.x (HTML/CSS/GSAP → deterministic MP4, unified `check` verification gate) with a pinned offline Chrome (frozen path at /etc/sl8/chrome-path), the embeddable fonts pack, ffmpeg, and Python/Pillow, on the sl8-base toolchain (Node 22, Claude Code, ai-gen, skills). Lean by design: no Manim/Remotion/LaTeX. Skills are not baked yet — the studio suite arrives at provisioning; once the suite finalizes, base skills will be incorporated into this same family.",
+        "capabilities": [
+          "Claude Code",
+          "HyperFrames 0.7.x",
+          "Pinned offline Chrome",
+          "ffmpeg",
+          "Fonts pack",
+          "Python 3.11"
+        ],
+        "packageOverrides": {
+          "hyperframes": {
+            "blurb": "HeyGen HyperFrames 0.7.x — render HTML/CSS/GSAP compositions to MP4; `check` is the verification gate; pinned Chrome at /etc/sl8/chrome-path; voiceover/captions/background-removal via ai-gen."
+          },
+          "fonts": {
+            "blurb": "Embeddable webfonts (Inter, Outfit, Fraunces, Anton, Space Grotesk) plus DejaVu/Comic-Neue for legible compositions."
+          },
+          "chrome-headless": {
+            "blurb": "Headless-Chrome system libraries that browser-based renderers depend on."
+          },
+          "ffmpeg": {
+            "blurb": "Encode and convert video and audio."
+          },
+          "python-runtime": {
+            "blurb": "Python 3.11 runtime (Pillow installed by the hyperframes pack for image preprocessing)."
           }
         }
       }
