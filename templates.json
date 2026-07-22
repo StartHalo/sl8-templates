@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-21T23:56:51Z",
+  "generatedAt": "2026-07-22T17:31:11Z",
   "sourceCommit": "74876e4008232454ad19c0a822051b0113f55345",
   "templates": [
     {
@@ -216,9 +216,9 @@
     {
       "name": "sl8-motion",
       "status": "active",
-      "currentVersion": "v20260721-233548",
+      "currentVersion": "v20260722-172219",
       "aliases": {
-        "versioned": "sl8-motion-v20260721-233548",
+        "versioned": "sl8-motion-v20260722-172219",
         "generic": "sl8-motion"
       },
       "base": {
@@ -282,36 +282,48 @@
             "hyperframes"
           ],
           "agentGuidance": "HeyGen HyperFrames renders HTML/CSS/GSAP compositions to MP4 via headless Chrome (Puppeteer beginFrame seeking) + ffmpeg. The CLI is global (`hyperframes`). Flow: `hyperframes init <dir> --non-interactive` to scaffold, edit the composition + animation tracks, verify with `hyperframes check` (the canonical gate: lint + headless-browser runtime/layout/motion/WCAG audit; exit 0 required), then `hyperframes render --output /home/user/artifacts/out.mp4 --non-interactive`. CHROME (pinned, offline): a pinned Chrome is pre-staged; its absolute path is frozen at /etc/sl8/chrome-path and as the /opt/chrome/chrome symlink. `hyperframes doctor` auto-detects it; if a command needs it explicitly, pass `--chrome \"$(cat /etc/sl8/chrome-path)\"`. Do NOT trigger a Puppeteer/Chrome download and do NOT rely on image ENV (E2B `commands.run` does not inherit it). GSAP: vendor GSAP into the composition — do not depend on a render-time CDN fetch (cdn.jsdelivr.net). MEDIA (voiceover/captions/background-removal are NOT local — use AI Gen, keyless via the SL8 proxy): voiceover → `ai-gen audio tts \"<text>\" -m fal-ai/kokoro/american-english`; captions/timing → `ai-gen transcribe <audio>` (or `ai-gen audio stt <audio> -m fal-ai/wizper`); background removal → `ai-gen run fal-ai/bria/background/remove --image <img>`. Generate the asset with ai-gen, then reference the produced audio/image file in the composition / pass it to `hyperframes render`. Pillow is installed for local image preprocessing. EXCLUDED: HeyGen credentials, avatars, cloud/lambda/cloudrun render, `publish`, premium TTS/BGM, and @hyperframes/aws-lambda — never used. Requires Node 22+ (the base provides it); system ffmpeg is present (ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use `skills add hyperframes` for HyperFrames domain knowledge."
+        },
+        {
+          "id": "hyperframes-suite",
+          "version": "1.0.0",
+          "description": "Bakes the hyperframes-studio skill suite (locked registry pins) into /home/user/.claude/skills and pre-warms the npx cache for the project-pinned hyperframes CLI — the studio template rule: sessions never re-install what every session needs. Suite source of truth: studio/hyperframes-studio/releases/vN/suite.lock.json; refresh = new template version. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "provides": [
+            "baked-skill-suite"
+          ],
+          "agentGuidance": "The studio skill suite is PRE-INSTALLED at /home/user/.claude/skills (router `hyperframes` + 8 domain skills + the motion-graphics workflow) — do NOT reinstall it; start every video/motion request at the /hyperframes router skill. Other workflow skills install lazily when the router routes to them (`skills add <workflow>` — needs GITHUB_TOKEN in the session env). The hyperframes CLI npx cache is pre-warmed: render via the project-pinned form (`npx --yes hyperframes@<pinned> render ...` or the scaffolded `npm run render`) with no download wait. OFFLINE CLOSURE (the studio rule): strip Google Fonts links (the 0.7.x compiler auto-fetches them otherwise), map families to the packed fonts (Inter/Outfit/Fraunces/Anton/Space Grotesk), declare `@font-face { font-family: 'X'; src: local('X') }` INSIDE each composition's [data-composition-id] wrapper, and treat `hyperframes check` exit 0 with zero 'Fetched ... from Google Fonts' compiler lines as the closure oracle."
         }
       ],
       "ui": {
-        "displayName": "Motion Studio",
+        "displayName": "HyperFrames",
         "emoji": "🎞️",
-        "tagline": "The hyperframes-studio machine: HyperFrames 0.7.x, pinned offline Chrome, fonts, ffmpeg.",
-        "description": "The Studio mechanism's motion machine — HeyGen HyperFrames 0.7.x (HTML/CSS/GSAP → deterministic MP4, unified `check` verification gate) with a pinned offline Chrome (frozen path at /etc/sl8/chrome-path), the embeddable fonts pack, ffmpeg, and Python/Pillow, on the sl8-base toolchain (Node 22, Claude Code, ai-gen, skills). Lean by design: no Manim/Remotion/LaTeX. Skills are not baked yet — the studio suite arrives at provisioning; once the suite finalizes, base skills will be incorporated into this same family.",
+        "tagline": "Turn a brief into a finished motion video — kinetic type, launches, explainers — rendered from HTML.",
+        "description": "The HyperFrames studio, ready to work: the full skill suite is pre-installed (the /hyperframes router, motion-graphics workflow, and 8 domain skills for animation, keyframes, creative direction, media, and Figma import), the HyperFrames 0.7.x renderer and a pinned offline Chrome are baked, and fonts, ffmpeg, and Python ship in the image. Give it a one-line idea, a product URL, or a document — it plans, designs, animates, verifies with the built-in check gate, and renders a production MP4. More workflows (explainers, launches, slideshows, captions) install themselves on demand.",
         "capabilities": [
-          "Claude Code",
-          "HyperFrames 0.7.x",
-          "Pinned offline Chrome",
-          "ffmpeg",
-          "Fonts pack",
-          "Python 3.11"
+          "Skill suite baked (10 skills)",
+          "/hyperframes router",
+          "Motion-graphics workflow",
+          "HyperFrames 0.7.x + offline Chrome",
+          "ffmpeg + fonts pack",
+          "Claude Code"
         ],
         "packageOverrides": {
           "hyperframes": {
-            "blurb": "HeyGen HyperFrames 0.7.x — render HTML/CSS/GSAP compositions to MP4; `check` is the verification gate; pinned Chrome at /etc/sl8/chrome-path; voiceover/captions/background-removal via ai-gen."
+            "blurb": "HeyGen HyperFrames 0.7.x — render HTML/CSS/GSAP compositions to MP4; `check` is the verification gate; pinned Chrome at /etc/sl8/chrome-path; media via ai-gen."
+          },
+          "hyperframes-suite": {
+            "blurb": "The studio's locked skill suite baked in: /hyperframes router, motion-graphics workflow, and the 8 domain skills — sessions start instantly, no installs. Other workflows lazy-install on route."
           },
           "fonts": {
-            "blurb": "Embeddable webfonts (Inter, Outfit, Fraunces, Anton, Space Grotesk) plus DejaVu/Comic-Neue for legible compositions."
+            "blurb": "Embeddable webfonts (Inter, Outfit, Fraunces, Anton, Space Grotesk) plus DejaVu/Comic-Neue — the offline-closure font set."
           },
           "chrome-headless": {
-            "blurb": "Headless-Chrome system libraries that browser-based renderers depend on."
+            "blurb": "Headless-Chrome system libraries for the renderer."
           },
           "ffmpeg": {
             "blurb": "Encode and convert video and audio."
           },
           "python-runtime": {
-            "blurb": "Python 3.11 runtime (Pillow installed by the hyperframes pack for image preprocessing)."
+            "blurb": "Python 3.11 runtime (Pillow for image preprocessing)."
           }
         }
       }
