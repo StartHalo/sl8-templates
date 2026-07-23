@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-22T19:37:16Z",
+  "generatedAt": "2026-07-23T01:03:39Z",
   "sourceCommit": "74876e4008232454ad19c0a822051b0113f55345",
   "templates": [
     {
@@ -331,9 +331,9 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260711-183955",
+      "currentVersion": "v20260722-175446",
       "aliases": {
-        "versioned": "sl8-video-v20260711-183955",
+        "versioned": "sl8-video-v20260722-175446",
         "generic": "sl8-video"
       },
       "base": {
@@ -400,6 +400,15 @@
             "jq"
           ],
           "agentGuidance": "Use `jq` to parse JSON in shell scripts — e.g. `ffprobe -v error -print_format json -show_format -show_streams in.mp4 | jq -r '.format.duration'`. `-e` makes the exit code follow the filter's truthiness (use it for assertions); `-r` prints raw strings without quotes. `sl8-capabilities | jq '.packs[].id'` lists this sandbox's installed packs."
+        },
+        {
+          "id": "video-suite",
+          "version": "1.0.0",
+          "description": "Bakes the video-studio skill suite (locked registry pins: the explainer-video workflow + the five domain skills) into /home/user/.claude/skills — the studio template rule: sessions never re-install what every session needs. Suite source of truth: studio/video-studio/studio.md suite pins (release lockfile from the first release on). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "provides": [
+            "baked-skill-suite"
+          ],
+          "agentGuidance": "The video-studio suite is PRE-INSTALLED at /home/user/.claude/skills. Any brief-to-video request starts at the explainer-video workflow skill and follows its numbered steps EXACTLY — plan.json approved before any paid call; style.md + style key before frames; every frame APPROVED before any motion spend (re-roll stills, ~25x cheaper than clips); every VO take MEASURED before any duration is set (visuals stretch to audio, never the reverse); QC input gates before assembly; frame-extraction + contact sheet before any delivery claim. Every step's artifact lands under /home/user/artifacts/<project>/ per the plan contract (video-prompting/references/plan-contract.md) — a run missing a step artifact is a failed run regardless of the MP4. Autonomous mode = checkpoint summaries in the transcript, never skipped steps. PAID CALLS: ai-gen only — estimate first, --max-cost on every call, journal request ids into plan.json, account by balance delta (never credits_used). Read assembly-qc/references/models-and-gotchas.md BEFORE debugging any failure — most failures are already documented."
         }
       ],
       "ui": {
