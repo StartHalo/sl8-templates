@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cdn.jsdelivr.net/gh/StartHalo/sl8-templates@main/templates.schema.json",
   "title": "StartHalo sl8-* E2B templates registry",
-  "description": "Public, machine-readable inventory of the sl8-* family of E2B sandbox templates and their tool packs. Generated from StartHalo/sl8-tools and mirrored to StartHalo/sl8-templates. See docs/features/e2b-templates-registry/ in sl8-tools for full documentation.",
+  "description": "Public, machine-readable inventory of the sl8-* family of E2B sandbox templates and their tool packs. Generated from studio/e2b/ in sl8-pipeline and manually mirrored to StartHalo/sl8-templates. Consumer requirements: REGISTRY-CONTRACT.md (in the generating repo).",
   "type": "object",
   "additionalProperties": true,
   "required": [
@@ -26,7 +26,7 @@
     "sourceCommit": {
       "type": "string",
       "pattern": "^([0-9a-f]{40}|uncommitted)$",
-      "description": "Full 40-char git SHA of the sl8-tools commit this snapshot was generated from, or the literal 'uncommitted' for ad-hoc local runs."
+      "description": "Full 40-char git SHA of the sl8-pipeline commit this snapshot was generated from, or the literal 'uncommitted' for ad-hoc local runs."
     },
     "templates": {
       "type": "array",
@@ -49,12 +49,12 @@
         "name": {
           "type": "string",
           "pattern": "^sl8-[a-z0-9-]+$",
-          "description": "Template name. Matches the directory under e2b/ in sl8-tools AND the generic alias."
+          "description": "Template name. Matches the directory under studio/e2b/ in sl8-pipeline AND the generic alias."
         },
         "status": {
           "type": "string",
           "enum": ["active"],
-          "description": "Always 'active' for anything in `templates`; archived templates live in archivedTemplates. DO NOT widen this enum to express deprecation — consumers hard-filter on `status === 'active'` (@starthalo/bot-cli runtimes-registry), so a template still in service but closed to new work would vanish from every runtime list and fail `bot validate`. Deprecation is carried additively by `lifecycle`."
+          "description": "Always 'active' for anything in `templates`; archived templates live in archivedTemplates. DO NOT widen this enum to express deprecation — consumers hard-filter on `status === 'active'` (@starthalo/bot-cli runtimes-registry), so a template still in service but closed to new work would vanish from every runtime list and fail `bot validate`. Deprecation is carried additively by `lifecycle`; consumer visibility by `ui.hidden`. (REGISTRY-CONTRACT.md R10 reserves a 'beta' state — not emitted by this generator today, and bot-cli would not list it; widen only with a coordinated consumer change.)"
         },
         "lifecycle": {
           "type": "string",
