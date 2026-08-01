@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-01T07:48:01Z",
-  "sourceCommit": "b4ab5cd42c15b3204aa1c5799ed3e781d261697d",
+  "generatedAt": "2026-08-01T09:03:57Z",
+  "sourceCommit": "9128f9aafd84f536615988b8ff3a868c2d4d3c3e",
   "templates": [
     {
       "name": "sl8-base",
