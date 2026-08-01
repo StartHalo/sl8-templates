@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-23T04:51:43Z",
-  "sourceCommit": "74876e4008232454ad19c0a822051b0113f55345",
+  "generatedAt": "2026-08-01T07:48:01Z",
+  "sourceCommit": "b4ab5cd42c15b3204aa1c5799ed3e781d261697d",
   "templates": [
     {
       "name": "sl8-base",
@@ -48,16 +48,22 @@
       "ui": {
         "displayName": "General",
         "emoji": "🤖",
-        "tagline": "Default runtime. Best for chat, code, and content workflows.",
+        "tagline": "The all-round Studio — image and video models, content tools, and code.",
         "description": "The general-purpose workspace most bots should use. Includes Claude Code, AI Gen, the Skills CLI, a TypeScript toolchain, and all three Node package managers. Pick this when you don't need anything beyond standard web/Node/AI tooling.",
         "capabilities": [
-          "Claude Code",
-          "AI Gen",
-          "TypeScript",
-          "Skills CLI",
-          "GCS mount",
-          "npm · pnpm · yarn"
+          "Image & video models",
+          "Writing & content",
+          "Code & data work",
+          "Custom skills",
+          "File delivery"
         ],
+        "brand": {
+          "accent": {
+            "from": "#E04010",
+            "to": "#F39A24",
+            "solid": "#E8631A"
+          }
+        },
         "packageOverrides": {
           "@anthropic-ai/claude-code": {
             "blurb": "Anthropic's coding assistant runs right inside the workspace."
@@ -183,7 +189,6 @@
         "tagline": "Adds Python, Manim, Remotion, HyperFrames, ffmpeg, and LaTeX on top of General.",
         "description": "Everything in General, plus a full code-to-video stack: Python 3.11, Manim Community Edition + ManimGL, Remotion (React/HTML → MP4), HeyGen HyperFrames (HTML/CSS → MP4), ffmpeg, TeX Live, and Xvfb for headless GL rendering. Runs on Node 22. Use this when your bot needs to render math/diagram animations or programmatic web video.",
         "capabilities": [
-          "Claude Code",
           "Python 3.11",
           "Manim",
           "Remotion",
@@ -191,6 +196,7 @@
           "ffmpeg",
           "LaTeX"
         ],
+        "hidden": true,
         "packageOverrides": {
           "manim": {
             "blurb": "Render math and diagram animations as MP4."
@@ -211,6 +217,19 @@
             "blurb": "Encode and convert video and audio."
           }
         }
+      },
+      "lifecycle": "deprecated",
+      "deprecation": {
+        "since": "2026-07-27",
+        "reason": "Pre-Studio kitchen-sink runtime: three unrelated toolchains (Manim, Remotion, HyperFrames) in one image and no baked skills. Studio-governed runtimes replace it per toolchain — sl8-motion / sl8-motion-core cover HyperFrames.",
+        "successor": null,
+        "blockers": [
+          "BOT-009",
+          "BOT-014",
+          "BOT-015",
+          "BOT-031",
+          "BOT-032"
+        ]
       }
     },
     {
@@ -294,18 +313,24 @@
         }
       ],
       "ui": {
-        "displayName": "HyperFrames",
-        "emoji": "🎞️",
-        "tagline": "Turn a brief into a finished motion video — kinetic type, launches, explainers — rendered from HTML.",
+        "displayName": "Motion",
+        "emoji": "🎬",
+        "tagline": "Motion graphics and generative animation — programmatic motion for Specialists who make things move.",
         "description": "The HyperFrames studio, ready to work: the full skill suite is pre-installed (the /hyperframes router, motion-graphics workflow, and 8 domain skills for animation, keyframes, creative direction, media, and Figma import), the HyperFrames 0.7.x renderer and a pinned offline Chrome are baked, and fonts, ffmpeg, and Python ship in the image. Give it a one-line idea, a product URL, or a document — it plans, designs, animates, verifies with the built-in check gate, and renders a production MP4. More workflows (explainers, launches, slideshows, captions) install themselves on demand.",
         "capabilities": [
-          "Skill suite baked (10 skills)",
-          "/hyperframes router",
-          "Motion-graphics workflow",
-          "HyperFrames 0.7.x + offline Chrome",
-          "ffmpeg + fonts pack",
-          "Claude Code"
+          "Kinetic typography",
+          "Product launch videos",
+          "Explainers",
+          "Brand motion pieces",
+          "Frame-perfect rendering"
         ],
+        "brand": {
+          "accent": {
+            "from": "#7C5CFF",
+            "to": "#A78BFA",
+            "solid": "#8B5CF6"
+          }
+        },
         "packageOverrides": {
           "hyperframes": {
             "blurb": "HeyGen HyperFrames 0.7.x — render HTML/CSS/GSAP compositions to MP4; `check` is the verification gate; pinned Chrome at /etc/sl8/chrome-path; media via ai-gen."
@@ -421,6 +446,7 @@
           "ffmpeg + fonts pack",
           "Claude Code"
         ],
+        "hidden": true,
         "packageOverrides": {
           "hyperframes": {
             "blurb": "HeyGen HyperFrames 0.7.x — render HTML/CSS/GSAP compositions to MP4; `check` is the verification gate; pinned Chrome at /etc/sl8/chrome-path; media via ai-gen."
@@ -529,17 +555,22 @@
       "ui": {
         "displayName": "Video",
         "emoji": "🎞️",
-        "tagline": "Adds ffmpeg, ImageMagick, caption fonts, jq, and Python for local video assembly on top of General.",
+        "tagline": "Cutting, encoding and captioning — for Specialists who ship video.",
         "description": "Everything in General, plus a local video-assembly toolchain: ffmpeg/ffprobe with the full normalize-concat-caption feature set (zoompan, drawtext, concat demuxer, anoisesrc/amix audio beds), ImageMagick for animated GIF assembly, a curated caption-font set (DejaVu family + Comic Neue at guaranteed paths), jq, and Python 3.11. Generation stays remote via ai-gen — pick this when a bot needs to cut, normalize, caption, and package clips into finished MP4s.",
         "capabilities": [
-          "Claude Code",
-          "AI Gen",
-          "ffmpeg",
-          "ImageMagick",
-          "Caption fonts",
-          "jq",
-          "Python 3.11"
+          "Cutting & encoding",
+          "Captions & subtitles",
+          "Format conversion",
+          "Stills & thumbnails",
+          "Audio cleanup"
         ],
+        "brand": {
+          "accent": {
+            "from": "#0EA5A5",
+            "to": "#2DD4BF",
+            "solid": "#14B8A6"
+          }
+        },
         "packageOverrides": {
           "ffmpeg": {
             "blurb": "Cut, normalize, caption, and stitch clips into finished MP4s."
