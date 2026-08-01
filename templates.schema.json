@@ -54,7 +54,40 @@
         "status": {
           "type": "string",
           "enum": ["active"],
-          "description": "Currently always 'active'. Archived templates live in archivedTemplates. Reserved field for future statuses."
+          "description": "Always 'active' for anything in `templates`; archived templates live in archivedTemplates. DO NOT widen this enum to express deprecation — consumers hard-filter on `status === 'active'` (@starthalo/bot-cli runtimes-registry), so a template still in service but closed to new work would vanish from every runtime list and fail `bot validate`. Deprecation is carried additively by `lifecycle`."
+        },
+        "lifecycle": {
+          "type": "string",
+          "enum": ["active", "deprecated"],
+          "default": "active",
+          "description": "Whether this template is open to NEW work. 'deprecated' means still published, still resolvable, existing bots keep running — but nothing new should pin it. Absent means 'active', so entries written before this field remain valid. Orthogonal to `status`, which stays 'active' for the whole service life."
+        },
+        "deprecation": {
+          "type": "object",
+          "description": "Required iff lifecycle is 'deprecated'. Records why, and what still stands in the way of archiving.",
+          "additionalProperties": false,
+          "required": ["since", "reason", "successor", "blockers"],
+          "properties": {
+            "since": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "Date the template was closed to new work."
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "description": "One line: why it is being retired."
+            },
+            "successor": {
+              "type": ["string", "null"],
+              "description": "The template new work should use instead, or null when none exists yet. Null is the honest value — never point at a template that cannot host the workloads."
+            },
+            "blockers": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Consumers that must be migrated or retired before this template can be archived. GENERATED, not hand-authored — recomputed from every bot.yaml sandboxTemplate pin plus the studio registry, so it cannot go stale."
+            }
+          }
         },
         "currentVersion": {
           "type": "string",
@@ -119,7 +152,7 @@
         },
         "ui": {
           "$ref": "#/$defs/Ui",
-          "description": "Optional curated display copy (name, emoji, tagline, capability chips, per-package blurbs) for use in pickers and info popovers. Absent for runtimes that haven't been curated yet; consumers MUST fall back to derived defaults in that case."
+          "description": "Curated display copy and brand (name, emoji, tagline, capability chips, accent, per-package blurbs). Under the Studio Registry Contract (REGISTRY-CONTRACT.md) every active template MUST ship either a contract-complete ui block or `ui.hidden: true` — the generator enforces this. Consumers fail closed: a non-compliant template is hidden from discovery and renders a neutral fallback for stored ids."
         }
       },
       "oneOf": [
@@ -129,25 +162,26 @@
     },
     "Ui": {
       "type": "object",
-      "description": "Curated display copy for a runtime. All fields optional; consumers apply derived defaults when absent. Authored in e2b/<template>/ui.json and embedded verbatim by the registry generator.",
+      "description": "Curated display copy and brand for a runtime — the Studio's consumer identity per REGISTRY-CONTRACT.md. Authored in e2b/<template>/ui.json and embedded verbatim by the registry generator, which enforces the contract (R2–R8) on every non-hidden block.",
       "additionalProperties": false,
       "properties": {
         "displayName": {
           "type": "string",
           "minLength": 1,
           "maxLength": 60,
-          "description": "Short human label shown in pickers, badges, headers (e.g. 'Animation'). One or two words; Title Case; avoid 'Template'/'Runtime'."
+          "description": "The Studio's name (R2): Title Case, 1–3 words, unique case-insensitively across consumer-ready templates, consumer-grade. Never include the word 'Studio' — the app derives '{displayName} Studio' from it."
         },
         "emoji": {
           "type": "string",
           "minLength": 1,
           "maxLength": 8,
-          "description": "Single grapheme used as a quick visual identifier (e.g. '🎬'). Avoid flags or politically-loaded symbols."
+          "description": "Exactly one emoji grapheme (R5), used on compact chips and admin surfaces (e.g. '🎬'). Avoid flags or politically-loaded symbols."
         },
         "tagline": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 200,
-          "description": "One-line value prop shown on the picker card. Frame as value, not feature list."
+          "description": "One sentence, sentence case, ends with a period (R3) — why you'd work here, written for a non-technical customer. Renders verbatim on the picker card and product page subtitle."
         },
         "description": {
           "type": "string",
@@ -156,12 +190,20 @@
         },
         "capabilities": {
           "type": "array",
-          "maxItems": 12,
+          "maxItems": 6,
           "items": {
             "type": "string",
             "maxLength": 40
           },
-          "description": "Short capability chips. Noun phrases or product names; six is the sweet spot."
+          "description": "Up to 6 short consumer-grade chips (R6) — 'Cutting & encoding', not package names. The app additionally filters chips through its lexicon at render time; an off-brand chip is dropped, not shown."
+        },
+        "brand": {
+          "$ref": "#/$defs/Brand",
+          "description": "The Studio's visual brand (R4). Required (with a complete accent) on every consumer-ready template."
+        },
+        "hidden": {
+          "type": "boolean",
+          "description": "true = deliberately not consumer-facing (R7): infrastructure image, base layer, or not-yet-launched product. Skipped by all consumer surfaces without being logged as a violation, and exempt from the other ui contract requirements."
         },
         "packageOverrides": {
           "type": "object",
@@ -185,6 +227,39 @@
                 "maxLength": 500,
                 "description": "Appendix-grade text for a 'show details' panel. Include version, key flags, operational caveats."
               }
+            }
+          }
+        }
+      }
+    },
+    "Brand": {
+      "type": "object",
+      "description": "A Studio's visual brand (REGISTRY-CONTRACT.md R4). The accent must be complete — a partial accent is invalid; no half-brands.",
+      "additionalProperties": false,
+      "properties": {
+        "logoSrc": {
+          "type": "string",
+          "description": "Reserved; unconsumed by SL8 today. The mark is the ∞ glyph tinted by accent.solid."
+        },
+        "accent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["from", "to", "solid"],
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "description": "Gradient start."
+            },
+            "to": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "description": "Gradient end."
+            },
+            "solid": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "description": "Single solid accent — rings, tints, focus. Should be distinct from other Studios' solids and legible on light and dark grounds."
             }
           }
         }
