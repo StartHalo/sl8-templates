@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-01T09:03:57Z",
-  "sourceCommit": "9128f9aafd84f536615988b8ff3a868c2d4d3c3e",
+  "generatedAt": "2026-08-20T11:32:55Z",
+  "sourceCommit": "76b065e24c07dba1159ee3c4aa9cc8d0a2f17ee7",
   "templates": [
     {
       "name": "sl8-base",
@@ -225,10 +225,8 @@
         "successor": null,
         "blockers": [
           "BOT-009",
-          "BOT-014",
-          "BOT-015",
-          "BOT-031",
-          "BOT-032"
+          "BOT-032",
+          "BOT-039"
         ]
       }
     },
