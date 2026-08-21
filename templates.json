@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-20T11:32:55Z",
-  "sourceCommit": "76b065e24c07dba1159ee3c4aa9cc8d0a2f17ee7",
+  "generatedAt": "2026-08-21T14:34:01Z",
+  "sourceCommit": "6faaa9b0de68c711276a2ea3cc5e0fa211dbd099",
   "templates": [
     {
       "name": "sl8-base",
@@ -223,11 +223,7 @@
         "since": "2026-07-27",
         "reason": "Pre-Studio kitchen-sink runtime: three unrelated toolchains (Manim, Remotion, HyperFrames) in one image and no baked skills. Studio-governed runtimes replace it per toolchain — sl8-motion / sl8-motion-core cover HyperFrames.",
         "successor": null,
-        "blockers": [
-          "BOT-009",
-          "BOT-032",
-          "BOT-039"
-        ]
+        "blockers": []
       }
     },
     {
