@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-22T18:37:23Z",
-  "sourceCommit": "f6d4ed78c00e1bd44c834340b82f35fc756772a8",
+  "generatedAt": "2026-08-23T08:47:14Z",
+  "sourceCommit": "f63d13c060a071cec5142d512b78c377f2579f6e",
   "templates": [
     {
       "name": "sl8-base",
@@ -466,9 +466,9 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260722-175446",
+      "currentVersion": "v20260823-014029",
       "aliases": {
-        "versioned": "sl8-video-v20260722-175446",
+        "versioned": "sl8-video-v20260823-014029",
         "generic": "sl8-video"
       },
       "base": {
@@ -538,12 +538,12 @@
         },
         {
           "id": "video-suite",
-          "version": "1.0.0",
-          "description": "Bakes the video-studio skill suite (locked registry pins: the explainer-video workflow + the five domain skills) into /home/user/.claude/skills — the studio template rule: sessions never re-install what every session needs. Suite source of truth: studio/video-studio/studio.md suite pins (release lockfile from the first release on). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "version": "1.1.0",
+          "description": "Bakes the video-studio skill suite (locked registry pins: the explainer-video and cinematic-video workflows + the five domain skills) into /home/user/.claude/skills — the studio template rule: sessions never re-install what every session needs. Suite source of truth: the release lockfile (studio/video-studio/releases/vN/suite.lock.json). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite"
           ],
-          "agentGuidance": "The video-studio suite is PRE-INSTALLED at /home/user/.claude/skills. Any brief-to-video request starts at the explainer-video workflow skill and follows its numbered steps EXACTLY — plan.json approved before any paid call; style.md + style key before frames; every frame APPROVED before any motion spend (re-roll stills, ~25x cheaper than clips); every VO take MEASURED before any duration is set (visuals stretch to audio, never the reverse); QC input gates before assembly; frame-extraction + contact sheet before any delivery claim. Every step's artifact lands under /home/user/artifacts/<project>/ per the plan contract (video-prompting/references/plan-contract.md) — a run missing a step artifact is a failed run regardless of the MP4. Autonomous mode = checkpoint summaries in the transcript, never skipped steps. PAID CALLS: ai-gen only — estimate first, --max-cost on every call, journal request ids into plan.json, account by balance delta (never credits_used). Read assembly-qc/references/models-and-gotchas.md BEFORE debugging any failure — most failures are already documented."
+          "agentGuidance": "The video-studio suite is PRE-INSTALLED at /home/user/.claude/skills. TWO creation workflows, and the brief decides which: a NARRATED explainer (script + voiceover, boards-first) starts at explainer-video; a CHARACTER piece with a locked identity and NO narration (story, scene, action) starts at cinematic-video. There is no router yet — pick by the brief and follow that workflow's numbered steps EXACTLY. Common law across both: the plan JSON is approved before any paid call; style.md before any frame; every frame APPROVED before any motion spend (re-roll stills, ~25x cheaper than clips); QC input gates before assembly; frame-extraction + contact sheet before any delivery claim. explainer-video adds: every VO take MEASURED before any duration is set (visuals stretch to audio, never the reverse). cinematic-video adds: the frozen CHARACTER_BLOCK is reused VERBATIM in every shot prompt (a paraphrase IS identity drift), engine-native audio only, and no dialogue or on-screen text anywhere. Every step's artifact lands under /home/user/artifacts/<project>/ — a run missing a step artifact is a failed run regardless of the MP4. PAID CALLS: ai-gen only, and the contract has ONE home — video-prompting/SKILL.md 'Paid-call contract' (validate, estimate, one call at a time under --max-cost, journal request ids, account by balance delta and NEVER credits_used) including the charged-vs-uncharged failure table (422/7/13/10). Read assembly-qc/references/models-and-gotchas.md BEFORE debugging any failure — most failures are documented."
         }
       ],
       "ui": {
