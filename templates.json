@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-23T08:47:14Z",
-  "sourceCommit": "f63d13c060a071cec5142d512b78c377f2579f6e",
+  "generatedAt": "2026-08-23T09:37:54Z",
+  "sourceCommit": "c2334773ffc750a4d0555af704bcfcd7e2c97c27",
   "templates": [
     {
       "name": "sl8-base",
@@ -466,9 +466,9 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260823-014029",
+      "currentVersion": "v20260823-023247",
       "aliases": {
-        "versioned": "sl8-video-v20260823-014029",
+        "versioned": "sl8-video-v20260823-023247",
         "generic": "sl8-video"
       },
       "base": {
@@ -538,7 +538,7 @@
         },
         {
           "id": "video-suite",
-          "version": "1.1.0",
+          "version": "1.1.1",
           "description": "Bakes the video-studio skill suite (locked registry pins: the explainer-video and cinematic-video workflows + the five domain skills) into /home/user/.claude/skills — the studio template rule: sessions never re-install what every session needs. Suite source of truth: the release lockfile (studio/video-studio/releases/vN/suite.lock.json). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite"
