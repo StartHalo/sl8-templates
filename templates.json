@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-23T09:37:54Z",
-  "sourceCommit": "c2334773ffc750a4d0555af704bcfcd7e2c97c27",
+  "generatedAt": "2026-08-23T18:21:38Z",
+  "sourceCommit": "e377b2bbbc18a1a531e52919b787493511e7cf5c",
   "templates": [
     {
       "name": "sl8-base",
@@ -466,9 +466,9 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260823-023247",
+      "currentVersion": "v20260823-110809",
       "aliases": {
-        "versioned": "sl8-video-v20260823-023247",
+        "versioned": "sl8-video-v20260823-110809",
         "generic": "sl8-video"
       },
       "base": {
@@ -538,12 +538,12 @@
         },
         {
           "id": "video-suite",
-          "version": "1.1.1",
-          "description": "Bakes the video-studio skill suite (locked registry pins: the explainer-video and cinematic-video workflows + the five domain skills) into /home/user/.claude/skills — the studio template rule: sessions never re-install what every session needs. Suite source of truth: the release lockfile (studio/video-studio/releases/vN/suite.lock.json). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "version": "1.2.0",
+          "description": "Bakes the video-studio skill suite (locked registry pins: the explainer-video, cinematic-video and character-episode workflows + the six domain skills) into /home/user/.claude/skills — the studio template rule: sessions never re-install what every session needs. Suite source of truth: the release lockfile (studio/video-studio/releases/vN/suite.lock.json). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite"
           ],
-          "agentGuidance": "The video-studio suite is PRE-INSTALLED at /home/user/.claude/skills. TWO creation workflows, and the brief decides which: a NARRATED explainer (script + voiceover, boards-first) starts at explainer-video; a CHARACTER piece with a locked identity and NO narration (story, scene, action) starts at cinematic-video. There is no router yet — pick by the brief and follow that workflow's numbered steps EXACTLY. Common law across both: the plan JSON is approved before any paid call; style.md before any frame; every frame APPROVED before any motion spend (re-roll stills, ~25x cheaper than clips); QC input gates before assembly; frame-extraction + contact sheet before any delivery claim. explainer-video adds: every VO take MEASURED before any duration is set (visuals stretch to audio, never the reverse). cinematic-video adds: the frozen CHARACTER_BLOCK is reused VERBATIM in every shot prompt (a paraphrase IS identity drift), engine-native audio only, and no dialogue or on-screen text anywhere. Every step's artifact lands under /home/user/artifacts/<project>/ — a run missing a step artifact is a failed run regardless of the MP4. PAID CALLS: ai-gen only, and the contract has ONE home — video-prompting/SKILL.md 'Paid-call contract' (validate, estimate, one call at a time under --max-cost, journal request ids, account by balance delta and NEVER credits_used) including the charged-vs-uncharged failure table (422/7/13/10). Read assembly-qc/references/models-and-gotchas.md BEFORE debugging any failure — most failures are documented."
+          "agentGuidance": "The video-studio suite is PRE-INSTALLED at /home/user/.claude/skills. THREE creation workflows, and the brief decides which — there is no router yet, so pick by brief shape and then follow that workflow's numbered steps EXACTLY. (1) A NARRATED explainer (script + voiceover, boards-first) starts at explainer-video. (2) A one-off CHARACTER piece with a locked identity and NO narration (a story, scene or action short) starts at cinematic-video. (3) An EPISODE of a recurring series — the brief names an episode number, a channel, or 'the same character as last time' — starts at character-episode, which reuses a channel-level seed kit instead of inventing a new character. If a channel's artifacts/<channel>/kit/ already exists, that is character-episode and the kit is READ, never regenerated: regenerating a kit's stills produces a new face wearing the old description. Common law across all three: the plan JSON is approved before any paid call; style.md before any frame; every frame APPROVED before any motion spend (re-roll stills, ~25x cheaper than clips); QC input gates before assembly; frame-extraction + contact sheet before any delivery claim. explainer-video adds: every VO take MEASURED before any duration is set (visuals stretch to audio, never the reverse). cinematic-video and character-episode add: the frozen CHARACTER_BLOCK is reused VERBATIM in every shot prompt (a paraphrase IS identity drift, and both carry a free pre-spend identity gate that must pass before any submit), engine-native audio only, and no dialogue or on-screen text anywhere. character-episode adds: snapshot the kit into the episode before any work, and answer QC-14 (does this episode match the PREVIOUS one) before delivering. Every step's artifact lands under /home/user/artifacts/<project>/ — a run missing a step artifact is a failed run regardless of the MP4. PAID CALLS: ai-gen only, and the contract has ONE home — video-prompting/SKILL.md 'Paid-call contract' (validate, estimate, one call at a time under --max-cost, journal request ids, account by balance delta and NEVER credits_used) including the charged-vs-uncharged failure table (422/7/13/10). Read assembly-qc/references/models-and-gotchas.md BEFORE debugging any failure — most failures are documented."
         }
       ],
       "ui": {
