@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-24T12:47:10Z",
-  "sourceCommit": "69f04e928e4408abc3d30412c99577305e03a4f1",
+  "generatedAt": "2026-08-24T13:40:22Z",
+  "sourceCommit": "7f94c08d085a1c98e3c2468feb7c9363aa5976a1",
   "templates": [
     {
       "name": "sl8-base",
@@ -224,44 +224,6 @@
         "reason": "Pre-Studio kitchen-sink runtime: three unrelated toolchains (Manim, Remotion, HyperFrames) in one image and no baked skills. Studio-governed runtimes replace it per toolchain — sl8-motion / sl8-motion-core cover HyperFrames.",
         "successor": null,
         "blockers": []
-      }
-    },
-    {
-      "name": "sl8-learning-games",
-      "status": "active",
-      "currentVersion": "v20260824-123216",
-      "aliases": {
-        "versioned": "sl8-learning-games-v20260824-123216",
-        "generic": "sl8-learning-games"
-      },
-      "base": {
-        "template": "sl8-base",
-        "version": "v20260711-011211"
-      },
-      "packs": [
-        {
-          "id": "chrome-headless",
-          "version": "1.0.0",
-          "description": "Shared system libraries required to run a headless Chrome / Chrome Headless Shell on Debian Bookworm. Installs no browser binary — downstream packs (e.g. remotion) fetch their own Chrome.",
-          "provides": [
-            "chrome-headless-libs"
-          ],
-          "agentGuidance": "Provides the native shared libraries a headless Chromium needs (NSS, GBM/Mesa, ALSA, ATK + ATK-bridge, Cairo/Pango, X composite/damage/fixes/randr, CUPS, dbus). It installs NO browser binary — tools that drive headless Chrome (Remotion, Puppeteer, Playwright) must download or point at their own Chromium build; this pack only guarantees the OS-level .so dependencies resolve. If a render fails with `error while loading shared libraries: libXXX.so: cannot open shared object file`, the missing library belongs here."
-        },
-        {
-          "id": "learning-games",
-          "version": "0.1.0",
-          "description": "The deterministic Learning Games CLI from a release-matched tarball, PDF text extraction, and an offline headless Chrome frozen into the template image.",
-          "provides": [
-            "learning-games",
-            "pdftotext",
-            "chrome"
-          ],
-          "agentGuidance": "Use `learning-games` for deterministic project initialization, validation, preview/release assembly, browser QC, ledgers, and review boards. The exact CLI is @starthalo/learning-games@0.1.0. PDF extraction is available as `pdftotext`. A build-frozen Chrome is available at `/opt/chrome/chrome` and its resolved path is stored in `/etc/sl8/chrome-path`; do not download browsers during a session. Final kits must remain offline and release assembly must retain the adult approval gate."
-        }
-      ],
-      "ui": {
-        "hidden": true
       }
     },
     {
@@ -504,9 +466,9 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260823-110809",
+      "currentVersion": "v20260824-063126",
       "aliases": {
-        "versioned": "sl8-video-v20260823-110809",
+        "versioned": "sl8-video-v20260824-063126",
         "generic": "sl8-video"
       },
       "base": {
@@ -576,12 +538,12 @@
         },
         {
           "id": "video-suite",
-          "version": "1.2.0",
-          "description": "Bakes the video-studio skill suite (locked registry pins: the explainer-video, cinematic-video and character-episode workflows + the six domain skills) into /home/user/.claude/skills — the studio template rule: sessions never re-install what every session needs. Suite source of truth: the release lockfile (studio/video-studio/releases/vN/suite.lock.json). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "version": "1.3.0",
+          "description": "Bakes the video-studio skill suite (locked registry pins: the explainer-video, cinematic-video, character-episode and keyframe-scene workflows + the six domain skills) into /home/user/.claude/skills — the studio template rule: sessions never re-install what every session needs. Suite source of truth: the release lockfile (studio/video-studio/releases/vN/suite.lock.json). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite"
           ],
-          "agentGuidance": "The video-studio suite is PRE-INSTALLED at /home/user/.claude/skills. THREE creation workflows, and the brief decides which — there is no router yet, so pick by brief shape and then follow that workflow's numbered steps EXACTLY. (1) A NARRATED explainer (script + voiceover, boards-first) starts at explainer-video. (2) A one-off CHARACTER piece with a locked identity and NO narration (a story, scene or action short) starts at cinematic-video. (3) An EPISODE of a recurring series — the brief names an episode number, a channel, or 'the same character as last time' — starts at character-episode, which reuses a channel-level seed kit instead of inventing a new character. If a channel's artifacts/<channel>/kit/ already exists, that is character-episode and the kit is READ, never regenerated: regenerating a kit's stills produces a new face wearing the old description. Common law across all three: the plan JSON is approved before any paid call; style.md before any frame; every frame APPROVED before any motion spend (re-roll stills, ~25x cheaper than clips); QC input gates before assembly; frame-extraction + contact sheet before any delivery claim. explainer-video adds: every VO take MEASURED before any duration is set (visuals stretch to audio, never the reverse). cinematic-video and character-episode add: the frozen CHARACTER_BLOCK is reused VERBATIM in every shot prompt (a paraphrase IS identity drift, and both carry a free pre-spend identity gate that must pass before any submit), engine-native audio only, and no dialogue or on-screen text anywhere. character-episode adds: snapshot the kit into the episode before any work, and answer QC-14 (does this episode match the PREVIOUS one) before delivering. Every step's artifact lands under /home/user/artifacts/<project>/ — a run missing a step artifact is a failed run regardless of the MP4. PAID CALLS: ai-gen only, and the contract has ONE home — video-prompting/SKILL.md 'Paid-call contract' (validate, estimate, one call at a time under --max-cost, journal request ids, account by balance delta and NEVER credits_used) including the charged-vs-uncharged failure table (422/7/13/10). Read assembly-qc/references/models-and-gotchas.md BEFORE debugging any failure — most failures are documented."
+          "agentGuidance": "The video-studio suite is PRE-INSTALLED at /home/user/.claude/skills. FOUR creation workflows, and the brief decides which — there is no router yet, so pick by brief shape and then follow that workflow's numbered steps EXACTLY. (1) A NARRATED explainer (script + voiceover, boards-first) starts at explainer-video. (2) A one-off CHARACTER piece with a locked identity and NO narration (a story, scene or action short) starts at cinematic-video. (3) An EPISODE of a recurring series — the brief names an episode number, a channel, or 'the same character as last time' — starts at character-episode, which reuses a channel-level seed kit instead of inventing a new character. (4) A piece where the END of a shot matters as much as the start — a reveal, a morph, a transformation, 'start here and end there' — starts at keyframe-scene, which pins BOTH endpoint frames and interpolates between them; its prompt describes the TRANSITION, never the scene, because the endpoints already say what things look like. If a channel's artifacts/<channel>/kit/ already exists, that is character-episode and the kit is READ, never regenerated: regenerating a kit's stills produces a new face wearing the old description. Common law across all three: the plan JSON is approved before any paid call; style.md before any frame; every frame APPROVED before any motion spend (re-roll stills, ~25x cheaper than clips); QC input gates before assembly; frame-extraction + contact sheet before any delivery claim. explainer-video adds: every VO take MEASURED before any duration is set (visuals stretch to audio, never the reverse). cinematic-video and character-episode add: the frozen CHARACTER_BLOCK is reused VERBATIM in every shot prompt (a paraphrase IS identity drift, and both carry a free pre-spend identity gate that must pass before any submit), engine-native audio only, and no dialogue or on-screen text anywhere. character-episode adds: snapshot the kit into the episode before any work, and answer QC-14 (does this episode match the PREVIOUS one) before delivering. Every step's artifact lands under /home/user/artifacts/<project>/ — a run missing a step artifact is a failed run regardless of the MP4. PAID CALLS: ai-gen only, and the contract has ONE home — video-prompting/SKILL.md 'Paid-call contract' (validate, estimate, one call at a time under --max-cost, journal request ids, account by balance delta and NEVER credits_used) including the charged-vs-uncharged failure table (422/7/13/10). Read assembly-qc/references/models-and-gotchas.md BEFORE debugging any failure — most failures are documented."
         }
       ],
       "ui": {
