@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-23T18:21:38Z",
-  "sourceCommit": "e377b2bbbc18a1a531e52919b787493511e7cf5c",
+  "generatedAt": "2026-08-24T12:47:10Z",
+  "sourceCommit": "69f04e928e4408abc3d30412c99577305e03a4f1",
   "templates": [
     {
       "name": "sl8-base",
@@ -224,6 +224,44 @@
         "reason": "Pre-Studio kitchen-sink runtime: three unrelated toolchains (Manim, Remotion, HyperFrames) in one image and no baked skills. Studio-governed runtimes replace it per toolchain — sl8-motion / sl8-motion-core cover HyperFrames.",
         "successor": null,
         "blockers": []
+      }
+    },
+    {
+      "name": "sl8-learning-games",
+      "status": "active",
+      "currentVersion": "v20260824-123216",
+      "aliases": {
+        "versioned": "sl8-learning-games-v20260824-123216",
+        "generic": "sl8-learning-games"
+      },
+      "base": {
+        "template": "sl8-base",
+        "version": "v20260711-011211"
+      },
+      "packs": [
+        {
+          "id": "chrome-headless",
+          "version": "1.0.0",
+          "description": "Shared system libraries required to run a headless Chrome / Chrome Headless Shell on Debian Bookworm. Installs no browser binary — downstream packs (e.g. remotion) fetch their own Chrome.",
+          "provides": [
+            "chrome-headless-libs"
+          ],
+          "agentGuidance": "Provides the native shared libraries a headless Chromium needs (NSS, GBM/Mesa, ALSA, ATK + ATK-bridge, Cairo/Pango, X composite/damage/fixes/randr, CUPS, dbus). It installs NO browser binary — tools that drive headless Chrome (Remotion, Puppeteer, Playwright) must download or point at their own Chromium build; this pack only guarantees the OS-level .so dependencies resolve. If a render fails with `error while loading shared libraries: libXXX.so: cannot open shared object file`, the missing library belongs here."
+        },
+        {
+          "id": "learning-games",
+          "version": "0.1.0",
+          "description": "The deterministic Learning Games CLI from a release-matched tarball, PDF text extraction, and an offline headless Chrome frozen into the template image.",
+          "provides": [
+            "learning-games",
+            "pdftotext",
+            "chrome"
+          ],
+          "agentGuidance": "Use `learning-games` for deterministic project initialization, validation, preview/release assembly, browser QC, ledgers, and review boards. The exact CLI is @starthalo/learning-games@0.1.0. PDF extraction is available as `pdftotext`. A build-frozen Chrome is available at `/opt/chrome/chrome` and its resolved path is stored in `/etc/sl8/chrome-path`; do not download browsers during a session. Final kits must remain offline and release assembly must retain the adult approval gate."
+        }
+      ],
+      "ui": {
+        "hidden": true
       }
     },
     {
