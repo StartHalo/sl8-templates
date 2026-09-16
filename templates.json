@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-16T20:06:21Z",
-  "sourceCommit": "62592d9844836c93666613e0ef4f558f6e67ce37",
+  "generatedAt": "2026-09-16T21:53:01Z",
+  "sourceCommit": "d2b1d71b80df2340afec3239a1ae15348c52807e",
   "templates": [
     {
       "name": "sl8-base",
       "status": "active",
-      "currentVersion": "v20260916-173829",
+      "currentVersion": "v20260916-212343",
       "aliases": {
-        "versioned": "sl8-base-v20260916-173829",
+        "versioned": "sl8-base-v20260916-212343",
         "generic": "sl8-base"
       },
       "components": [
@@ -22,7 +22,7 @@
         },
         {
           "name": "@starthalo/skills-cli",
-          "version": "1.1.1"
+          "version": "1.3.0"
         },
         {
           "name": "@anthropic-ai/claude-code",
@@ -229,14 +229,14 @@
     {
       "name": "sl8-image",
       "status": "active",
-      "currentVersion": "v20260916-191903",
+      "currentVersion": "v20260916-214018",
       "aliases": {
-        "versioned": "sl8-image-v20260916-191903",
+        "versioned": "sl8-image-v20260916-214018",
         "generic": "sl8-image"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260916-173829"
+        "version": "v20260916-212343"
       },
       "packs": [
         {
@@ -317,14 +317,14 @@
     {
       "name": "sl8-motion",
       "status": "active",
-      "currentVersion": "v20260916-190306",
+      "currentVersion": "v20260916-214015",
       "aliases": {
-        "versioned": "sl8-motion-v20260916-190306",
+        "versioned": "sl8-motion-v20260916-214015",
         "generic": "sl8-motion"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260916-173829"
+        "version": "v20260916-212343"
       },
       "packs": [
         {
@@ -438,14 +438,14 @@
     {
       "name": "sl8-motion-core",
       "status": "active",
-      "currentVersion": "v20260916-191207",
+      "currentVersion": "v20260916-214017",
       "aliases": {
-        "versioned": "sl8-motion-core-v20260916-191207",
+        "versioned": "sl8-motion-core-v20260916-214017",
         "generic": "sl8-motion-core"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260916-173829"
+        "version": "v20260916-212343"
       },
       "packs": [
         {
@@ -554,14 +554,14 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260916-185243",
+      "currentVersion": "v20260916-213935",
       "aliases": {
-        "versioned": "sl8-video-v20260916-185243",
+        "versioned": "sl8-video-v20260916-213935",
         "generic": "sl8-video"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260916-173829"
+        "version": "v20260916-212343"
       },
       "packs": [
         {
