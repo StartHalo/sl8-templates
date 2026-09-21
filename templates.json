@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-16T21:53:01Z",
-  "sourceCommit": "d2b1d71b80df2340afec3239a1ae15348c52807e",
+  "generatedAt": "2026-09-21T22:23:50Z",
+  "sourceCommit": "ce18586a676f528b6fb16a42b8e8d2518404dca5",
   "templates": [
     {
       "name": "sl8-base",
       "status": "active",
-      "currentVersion": "v20260916-212343",
+      "currentVersion": "v20260921-194939",
       "aliases": {
-        "versioned": "sl8-base-v20260916-212343",
+        "versioned": "sl8-base-v20260921-194939",
         "generic": "sl8-base"
       },
       "components": [
@@ -25,6 +25,10 @@
           "version": "1.3.0"
         },
         {
+          "name": "@starthalo/sl8-agent",
+          "version": "0.1.0"
+        },
+        {
           "name": "@anthropic-ai/claude-code",
           "version": "2.1.141"
         },
@@ -38,7 +42,7 @@
         },
         {
           "name": "typescript",
-          "version": "5.x"
+          "version": "7.0.2"
         },
         {
           "name": "gcsfuse",
@@ -229,14 +233,14 @@
     {
       "name": "sl8-image",
       "status": "active",
-      "currentVersion": "v20260916-214018",
+      "currentVersion": "v20260921-220142",
       "aliases": {
-        "versioned": "sl8-image-v20260916-214018",
+        "versioned": "sl8-image-v20260921-220142",
         "generic": "sl8-image"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260916-212343"
+        "version": "v20260921-194939"
       },
       "packs": [
         {
@@ -317,14 +321,14 @@
     {
       "name": "sl8-motion",
       "status": "active",
-      "currentVersion": "v20260916-214015",
+      "currentVersion": "v20260921-220140",
       "aliases": {
-        "versioned": "sl8-motion-v20260916-214015",
+        "versioned": "sl8-motion-v20260921-220140",
         "generic": "sl8-motion"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260916-212343"
+        "version": "v20260921-194939"
       },
       "packs": [
         {
@@ -438,14 +442,14 @@
     {
       "name": "sl8-motion-core",
       "status": "active",
-      "currentVersion": "v20260916-214017",
+      "currentVersion": "v20260921-220141",
       "aliases": {
-        "versioned": "sl8-motion-core-v20260916-214017",
+        "versioned": "sl8-motion-core-v20260921-220141",
         "generic": "sl8-motion-core"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260916-212343"
+        "version": "v20260921-194939"
       },
       "packs": [
         {
@@ -554,14 +558,14 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260916-213935",
+      "currentVersion": "v20260921-220139",
       "aliases": {
-        "versioned": "sl8-video-v20260916-213935",
+        "versioned": "sl8-video-v20260921-220139",
         "generic": "sl8-video"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260916-212343"
+        "version": "v20260921-194939"
       },
       "packs": [
         {
