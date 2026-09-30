@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-21T22:23:50Z",
-  "sourceCommit": "ce18586a676f528b6fb16a42b8e8d2518404dca5",
+  "generatedAt": "2026-09-30T00:45:33Z",
+  "sourceCommit": "94d4611bb7213837c54ab4fb1e232028db6fb00d",
   "templates": [
     {
       "name": "sl8-base",
       "status": "active",
-      "currentVersion": "v20260921-194939",
+      "currentVersion": "v20260929-231339",
       "aliases": {
-        "versioned": "sl8-base-v20260921-194939",
+        "versioned": "sl8-base-v20260929-231339",
         "generic": "sl8-base"
       },
       "components": [
@@ -17,16 +17,20 @@
           "version": "22.x"
         },
         {
-          "name": "@starthalo/ai-gen",
-          "version": "2.1.1"
+          "name": "@starthalo/skills-shared",
+          "version": "0.2.0"
         },
         {
           "name": "@starthalo/skills-cli",
-          "version": "1.3.0"
+          "version": "1.3.1"
+        },
+        {
+          "name": "@starthalo/ai-gen",
+          "version": "2.2.0"
         },
         {
           "name": "@starthalo/sl8-agent",
-          "version": "0.1.0"
+          "version": "0.3.0"
         },
         {
           "name": "@anthropic-ai/claude-code",
@@ -161,8 +165,8 @@
         },
         {
           "id": "hyperframes",
-          "version": "1.3.0",
-          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP → deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. Ships the 0.8.x CLI generation: `check` remains the unified verification gate (lint + headless-browser runtime/layout/motion/contrast audit in one pass), the lint rule set is materially quieter than 0.7.x (0.8.5–0.8.8 dropped eleven rules that fired on correct compositions), and a caught post-render throw no longer reports a valid render as failed. A PINNED Chrome is pre-installed and its path is frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink) so renders run offline with no per-run download. Local-only/keyless render core: voiceover/captions/background-removal are produced via AI Gen (not bundled local weights); HeyGen cloud features and @hyperframes/aws-lambda are excluded — which is why 0.8.0's cloud-transport migration boundary (Lambda/SAM/CDK and Cloud Run redeploy) does not apply to this image.",
+          "version": "1.4.0",
+          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP -> deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. Ships 0.8.61 — 53 releases on from the 0.8.8 this pack carried since 2026-08-22. `check` remains the unified verification gate (lint + headless-browser runtime/layout/motion/contrast audit in one pass). A PINNED Chrome is pre-installed and its path frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink) so renders run offline with no per-run download. THE INSTALL IS CHOWNED TO `user` (1.4.0): the CLI repairs itself at runtime, and against a root-owned tree that repair half-completes and deletes the CLI — measured, see pack.ts. Local-only/keyless render core: voiceover/captions/background-removal come from AI Gen; HeyGen cloud features and @hyperframes/aws-lambda are excluded.",
           "provides": [
             "hyperframes"
           ],
@@ -233,16 +237,23 @@
     {
       "name": "sl8-image",
       "status": "active",
-      "currentVersion": "v20260921-220142",
+      "currentVersion": "v20260924-170039",
       "aliases": {
-        "versioned": "sl8-image-v20260921-220142",
+        "versioned": "sl8-image-v20260924-170039",
         "generic": "sl8-image"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260921-194939"
+        "version": "v20260924-015025"
       },
       "packs": [
+        {
+          "id": "agent-contract",
+          "version": "1.1.0",
+          "description": "The machine's own operating contract, baked into /home/user: AGENTS.md and CLAUDE.md, rendered from the studio record for this exact template version (R42). The copy is written by studio/scripts/build.js beside the version's template.ts while the version is cut but not yet built, and this pack refuses to build a copy rendered for any other version or any other package pins. It bakes NO .sl8/studio.json: production's launcher replaces the two contract files on every launch but never touches .sl8/, so a baked spend ceiling of 0 would outlive the contract and stop a legacy bot from spending (2026-09-23). Run parameters arrive in .sl8/run.json at provisioning. The eval runner uploads its own copy only where the image carries none, so a run on this image proves the contract that ships.",
+          "provides": [],
+          "agentGuidance": "This machine carries its own operating contract: /home/user/AGENTS.md (read natively by Codex and Pi) and /home/user/CLAUDE.md (which imports AGENTS.md for Claude Code). It was rendered for this exact image, so the tools and versions it lists are the ones installed. Read AGENTS.md for where work goes and what this machine can do; `sl8-agent` hands the same contract to every run, including resumes. This run's parameters — autonomy, model, what you may spend — are in .sl8/run.json when a run was provisioned; no such file means no run parameters were set."
+        },
         {
           "id": "python-runtime",
           "version": "1.0.0",
@@ -321,16 +332,23 @@
     {
       "name": "sl8-motion",
       "status": "active",
-      "currentVersion": "v20260921-220140",
+      "currentVersion": "v20260924-170041",
       "aliases": {
-        "versioned": "sl8-motion-v20260921-220140",
+        "versioned": "sl8-motion-v20260924-170041",
         "generic": "sl8-motion"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260921-194939"
+        "version": "v20260924-015025"
       },
       "packs": [
+        {
+          "id": "agent-contract",
+          "version": "1.1.0",
+          "description": "The machine's own operating contract, baked into /home/user: AGENTS.md and CLAUDE.md, rendered from the studio record for this exact template version (R42). The copy is written by studio/scripts/build.js beside the version's template.ts while the version is cut but not yet built, and this pack refuses to build a copy rendered for any other version or any other package pins. It bakes NO .sl8/studio.json: production's launcher replaces the two contract files on every launch but never touches .sl8/, so a baked spend ceiling of 0 would outlive the contract and stop a legacy bot from spending (2026-09-23). Run parameters arrive in .sl8/run.json at provisioning. The eval runner uploads its own copy only where the image carries none, so a run on this image proves the contract that ships.",
+          "provides": [],
+          "agentGuidance": "This machine carries its own operating contract: /home/user/AGENTS.md (read natively by Codex and Pi) and /home/user/CLAUDE.md (which imports AGENTS.md for Claude Code). It was rendered for this exact image, so the tools and versions it lists are the ones installed. Read AGENTS.md for where work goes and what this machine can do; `sl8-agent` hands the same contract to every run, including resumes. This run's parameters — autonomy, model, what you may spend — are in .sl8/run.json when a run was provisioned; no such file means no run parameters were set."
+        },
         {
           "id": "python-runtime",
           "version": "1.0.0",
@@ -381,8 +399,8 @@
         },
         {
           "id": "hyperframes",
-          "version": "1.3.0",
-          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP → deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. Ships the 0.8.x CLI generation: `check` remains the unified verification gate (lint + headless-browser runtime/layout/motion/contrast audit in one pass), the lint rule set is materially quieter than 0.7.x (0.8.5–0.8.8 dropped eleven rules that fired on correct compositions), and a caught post-render throw no longer reports a valid render as failed. A PINNED Chrome is pre-installed and its path is frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink) so renders run offline with no per-run download. Local-only/keyless render core: voiceover/captions/background-removal are produced via AI Gen (not bundled local weights); HeyGen cloud features and @hyperframes/aws-lambda are excluded — which is why 0.8.0's cloud-transport migration boundary (Lambda/SAM/CDK and Cloud Run redeploy) does not apply to this image.",
+          "version": "1.4.0",
+          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP -> deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. Ships 0.8.61 — 53 releases on from the 0.8.8 this pack carried since 2026-08-22. `check` remains the unified verification gate (lint + headless-browser runtime/layout/motion/contrast audit in one pass). A PINNED Chrome is pre-installed and its path frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink) so renders run offline with no per-run download. THE INSTALL IS CHOWNED TO `user` (1.4.0): the CLI repairs itself at runtime, and against a root-owned tree that repair half-completes and deletes the CLI — measured, see pack.ts. Local-only/keyless render core: voiceover/captions/background-removal come from AI Gen; HeyGen cloud features and @hyperframes/aws-lambda are excluded.",
           "provides": [
             "hyperframes"
           ],
@@ -390,7 +408,7 @@
         },
         {
           "id": "hyperframes-suite",
-          "version": "1.2.0",
+          "version": "1.2.1",
           "description": "Bakes the hyperframes-studio skill suite (locked registry pins, incl. the 5-skill motion-quality DOCTRINE chain) into /home/user/.claude/skills and pre-warms the npx cache for the project-pinned hyperframes CLI — the studio template rule: sessions never re-install what every session needs. Suite source of truth: studio/hyperframes-studio/releases/vN/suite.lock.json; refresh = new template version. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite"
@@ -442,16 +460,23 @@
     {
       "name": "sl8-motion-core",
       "status": "active",
-      "currentVersion": "v20260921-220141",
+      "currentVersion": "v20260924-170042",
       "aliases": {
-        "versioned": "sl8-motion-core-v20260921-220141",
+        "versioned": "sl8-motion-core-v20260924-170042",
         "generic": "sl8-motion-core"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260921-194939"
+        "version": "v20260924-015025"
       },
       "packs": [
+        {
+          "id": "agent-contract",
+          "version": "1.1.0",
+          "description": "The machine's own operating contract, baked into /home/user: AGENTS.md and CLAUDE.md, rendered from the studio record for this exact template version (R42). The copy is written by studio/scripts/build.js beside the version's template.ts while the version is cut but not yet built, and this pack refuses to build a copy rendered for any other version or any other package pins. It bakes NO .sl8/studio.json: production's launcher replaces the two contract files on every launch but never touches .sl8/, so a baked spend ceiling of 0 would outlive the contract and stop a legacy bot from spending (2026-09-23). Run parameters arrive in .sl8/run.json at provisioning. The eval runner uploads its own copy only where the image carries none, so a run on this image proves the contract that ships.",
+          "provides": [],
+          "agentGuidance": "This machine carries its own operating contract: /home/user/AGENTS.md (read natively by Codex and Pi) and /home/user/CLAUDE.md (which imports AGENTS.md for Claude Code). It was rendered for this exact image, so the tools and versions it lists are the ones installed. Read AGENTS.md for where work goes and what this machine can do; `sl8-agent` hands the same contract to every run, including resumes. This run's parameters — autonomy, model, what you may spend — are in .sl8/run.json when a run was provisioned; no such file means no run parameters were set."
+        },
         {
           "id": "python-runtime",
           "version": "1.0.0",
@@ -502,8 +527,8 @@
         },
         {
           "id": "hyperframes",
-          "version": "1.3.0",
-          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP → deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. Ships the 0.8.x CLI generation: `check` remains the unified verification gate (lint + headless-browser runtime/layout/motion/contrast audit in one pass), the lint rule set is materially quieter than 0.7.x (0.8.5–0.8.8 dropped eleven rules that fired on correct compositions), and a caught post-render throw no longer reports a valid render as failed. A PINNED Chrome is pre-installed and its path is frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink) so renders run offline with no per-run download. Local-only/keyless render core: voiceover/captions/background-removal are produced via AI Gen (not bundled local weights); HeyGen cloud features and @hyperframes/aws-lambda are excluded — which is why 0.8.0's cloud-transport migration boundary (Lambda/SAM/CDK and Cloud Run redeploy) does not apply to this image.",
+          "version": "1.4.0",
+          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP -> deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. Ships 0.8.61 — 53 releases on from the 0.8.8 this pack carried since 2026-08-22. `check` remains the unified verification gate (lint + headless-browser runtime/layout/motion/contrast audit in one pass). A PINNED Chrome is pre-installed and its path frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink) so renders run offline with no per-run download. THE INSTALL IS CHOWNED TO `user` (1.4.0): the CLI repairs itself at runtime, and against a root-owned tree that repair half-completes and deletes the CLI — measured, see pack.ts. Local-only/keyless render core: voiceover/captions/background-removal come from AI Gen; HeyGen cloud features and @hyperframes/aws-lambda are excluded.",
           "provides": [
             "hyperframes"
           ],
@@ -511,7 +536,7 @@
         },
         {
           "id": "hyperframes-suite-core",
-          "version": "1.1.0",
+          "version": "1.1.1",
           "description": "Bakes ONLY the hyperframes-studio CORE tier (14 skills: the 7 hyperframes-* domain skills incl. hyperframes-audio + media-use + figma + the 5-skill motion-quality DOCTRINE chain) into /home/user/.claude/skills and pre-warms the npx cache for the project-pinned hyperframes CLI. No router, no workflows — this is the DERIVATION bake for Market persona bots (specs/extensibility.md suite tiers): the workflows a bot adopts (and its bot-local skills) install at provisioning from botSkills. Tier source of truth: studio/hyperframes-studio/releases/vN/suite.lock.json tiers{}; refresh = new template version. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. Shares its apply() with hyperframes-suite (single home).",
           "provides": [
             "baked-skill-suite-core"
@@ -558,16 +583,23 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260921-220139",
+      "currentVersion": "v20260924-170040",
       "aliases": {
-        "versioned": "sl8-video-v20260921-220139",
+        "versioned": "sl8-video-v20260924-170040",
         "generic": "sl8-video"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260921-194939"
+        "version": "v20260924-015025"
       },
       "packs": [
+        {
+          "id": "agent-contract",
+          "version": "1.1.0",
+          "description": "The machine's own operating contract, baked into /home/user: AGENTS.md and CLAUDE.md, rendered from the studio record for this exact template version (R42). The copy is written by studio/scripts/build.js beside the version's template.ts while the version is cut but not yet built, and this pack refuses to build a copy rendered for any other version or any other package pins. It bakes NO .sl8/studio.json: production's launcher replaces the two contract files on every launch but never touches .sl8/, so a baked spend ceiling of 0 would outlive the contract and stop a legacy bot from spending (2026-09-23). Run parameters arrive in .sl8/run.json at provisioning. The eval runner uploads its own copy only where the image carries none, so a run on this image proves the contract that ships.",
+          "provides": [],
+          "agentGuidance": "This machine carries its own operating contract: /home/user/AGENTS.md (read natively by Codex and Pi) and /home/user/CLAUDE.md (which imports AGENTS.md for Claude Code). It was rendered for this exact image, so the tools and versions it lists are the ones installed. Read AGENTS.md for where work goes and what this machine can do; `sl8-agent` hands the same contract to every run, including resumes. This run's parameters — autonomy, model, what you may spend — are in .sl8/run.json when a run was provisioned; no such file means no run parameters were set."
+        },
         {
           "id": "python-runtime",
           "version": "1.0.0",
