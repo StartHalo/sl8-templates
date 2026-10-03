@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T06:31:50Z",
-  "sourceCommit": "aa95277535112d8417207595a4a142171e08d6ca",
+  "generatedAt": "2026-10-03T22:01:20Z",
+  "sourceCommit": "9c2583b649bd1f4c2b6db24d97853cd21fb1c425",
   "templates": [
     {
       "name": "sl8-base",
       "status": "active",
-      "currentVersion": "v20260929-231339",
+      "currentVersion": "v20261003-191831",
       "aliases": {
-        "versioned": "sl8-base-v20260929-231339",
+        "versioned": "sl8-base:v20261003-191831",
         "generic": "sl8-base"
       },
       "components": [
@@ -34,7 +34,7 @@
         },
         {
           "name": "@anthropic-ai/claude-code",
-          "version": "2.1.141"
+          "version": "2.1.285"
         },
         {
           "name": "pnpm",
