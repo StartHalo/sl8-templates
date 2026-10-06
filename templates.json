@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-03T22:01:20Z",
-  "sourceCommit": "9c2583b649bd1f4c2b6db24d97853cd21fb1c425",
+  "generatedAt": "2026-10-06T18:16:41Z",
+  "sourceCommit": "62c9833cb1df72f438aa07c44c761c1d19cbb577",
   "templates": [
     {
       "name": "sl8-base",
@@ -237,14 +237,14 @@
     {
       "name": "sl8-image",
       "status": "active",
-      "currentVersion": "v20260924-170039",
+      "currentVersion": "v20261006-011022",
       "aliases": {
-        "versioned": "sl8-image-v20260924-170039",
+        "versioned": "sl8-image:v20261006-011022",
         "generic": "sl8-image"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20260924-015025"
+        "version": "v20261003-191831"
       },
       "packs": [
         {
@@ -264,6 +264,30 @@
             "venv"
           ],
           "agentGuidance": "Python 3 is at `python3` (no unversioned `python`). Use `pip3 install --break-system-packages <pkg>` for system-wide installs (this image follows PEP 668), or `python3 -m venv .venv && source .venv/bin/activate` for a project-local venv. Native-extension build tools (build-essential, pkg-config, python3-dev) are present, so packages like Pillow, lxml, manim can compile from source if needed."
+        },
+        {
+          "id": "python-imaging",
+          "version": "1.0.0",
+          "description": "Pinned Python imaging stack for deterministic photo work on the Image and Video machines (media-photo-editing, media-qc, media-motion-graphics): Pillow, numpy, OpenCV (headless), scikit-image, pillow-heif (HEIC/HEIF) and rawpy (camera RAW). Installed system-wide at build time from cp311 manylinux wheels; nothing is installed at runtime.",
+          "provides": [
+            "PIL",
+            "numpy",
+            "cv2",
+            "skimage",
+            "pillow_heif",
+            "rawpy"
+          ],
+          "agentGuidance": "The Python imaging stack is PRE-INSTALLED and pinned: Pillow 11.2.1, numpy, opencv-python-headless (cv2), scikit-image (skimage), pillow-heif (call pillow_heif.register_heif_opener() before opening HEIC) and rawpy (camera RAW). Do NOT pip install anything at runtime (house rule HR21), even where other guidance mentions pip: if an import fails, the machine is broken; report it. libvips is not installed."
+        },
+        {
+          "id": "ffmpeg",
+          "version": "1.0.0",
+          "description": "FFmpeg for video/audio encoding and frame-to-MP4 assembly.",
+          "provides": [
+            "ffmpeg",
+            "ffprobe"
+          ],
+          "agentGuidance": "Use `ffmpeg -i <input> <output>` for transcoding, `ffmpeg -framerate <fps> -i frame_%04d.png out.mp4` for frame sequences, and `ffprobe -v quiet -print_format json -show_format -show_streams <file>` to inspect media. The Debian ffmpeg build includes the common codecs (libx264, libvpx, aac); use `-c:v libx264 -pix_fmt yuv420p` for broadly-compatible MP4 output."
         },
         {
           "id": "fonts",
@@ -294,6 +318,15 @@
             "mogrify"
           ],
           "agentGuidance": "Debian ships the ImageMagick 6.x series: the entry point is `convert` (plus `identify`, `montage`, `mogrify`) — there is NO `magick` binary, do not call it. Assemble animated GIFs from PNG frames with `convert -delay 20 -loop 0 frame-*.png out.gif` (delay is in 1/100ths of a second; -loop 0 = infinite). Inspect images with `identify <file>` (one line per GIF frame). Raster formats (PNG/JPEG/GIF/WebP) are unrestricted; the default security policy only limits ghostscript-backed coders like PDF/PS."
+        },
+        {
+          "id": "media-image-suite",
+          "version": "1.0.1",
+          "description": "Bakes the image-studio media skills into /home/user/.claude/skills (via .agents/skills): media-ai-gen (run ai-gen, house rules, manifest, gates), media-image-generation (image intent to endpoint, craft), media-photo-editing (deterministic edits), media-character-sheet (identity sheets) and media-qc (deterministic checks). Repurposed from fal's skills with recorded deltas (studio/image-studio/adaptations.md). No router and no job workflow. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "provides": [
+            "baked-skill-suite"
+          ],
+          "agentGuidance": "The media skills are PRE-INSTALLED (media-ai-gen, media-image-generation, media-photo-editing, media-character-sheet, media-qc). Do NOT reinstall. Every model call goes through media-ai-gen (ai-gen), and every media-* skill follows its house rules (HR-1.0, media-ai-gen/references/house-rules.md): declare then assert, cost first, never re-fire a job, gates instead of questions, checks are scripts. There is no router: a job-specific workflow comes from the bot that runs here. Deliverables go under /home/user/artifacts/<project>/ with a manifest (media-ai-gen/scripts/manifest.mjs)."
         }
       ],
       "ui": {
