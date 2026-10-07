@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-06T18:16:41Z",
-  "sourceCommit": "62c9833cb1df72f438aa07c44c761c1d19cbb577",
+  "generatedAt": "2026-10-07T00:34:29Z",
+  "sourceCommit": "b40e133a7278cc7e26b3d7e3ac17543b9d6eb609",
   "templates": [
     {
       "name": "sl8-base",
@@ -332,14 +332,14 @@
       "ui": {
         "displayName": "Image",
         "emoji": "🖼️",
-        "tagline": "Staging, product shots and pixel work — for Specialists who ship images.",
-        "description": "Everything in General, plus the local image toolchain image-studio's deterministic half runs on: ImageMagick 6.9 (resize, quantise, trim, montage, geometry and white-ratio measurement), a curated font set at guaranteed paths, and Python 3.11. Generation and editing stay remote via ai-gen — pick this when a bot needs to stage a room, clean up a product shot, quantise to pixel art, or quality-check an image against the plate it came from.",
+        "tagline": "Generated and edited stills — for Specialists who ship images.",
+        "description": "Everything in General, plus five image skills adapted from fal's: choose and prompt the image model through ai-gen, edit photos locally (grades, crops, cutouts, composites with exact text added locally), make character reference sheets, and measure every file with media-qc. Python imaging (Pillow, OpenCV, scikit-image), ImageMagick, ffmpeg and a curated font set are baked; every generation is recorded in a manifest with its credits. Pick this when a bot needs finished stills at a declared size.",
         "capabilities": [
-          "Room staging",
-          "Product shots",
-          "Pixel art & quantise",
-          "Contact sheets",
-          "Geometry & colour QC"
+          "Text to image",
+          "Generative edits",
+          "Cutouts & composites",
+          "Character sheets",
+          "Measured image QC"
         ],
         "brand": {
           "accent": {
@@ -358,6 +358,12 @@
           },
           "python-runtime": {
             "blurb": "Python 3.11 with pip and venv for measurement scripts and JSON work."
+          },
+          "python-imaging": {
+            "blurb": "Pillow, numpy, OpenCV, scikit-image, HEIC and RAW readers, pinned — for local photo work with no runtime installs."
+          },
+          "media-image-suite": {
+            "blurb": "Five image skills from fal, adapted with recorded changes: generation, photo editing, character sheets, the ai-gen runner and media-qc."
           }
         }
       }
@@ -616,14 +622,14 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20260924-170040",
+      "currentVersion": "v20261006-224252",
       "aliases": {
-        "versioned": "sl8-video-v20260924-170040",
+        "versioned": "sl8-video:v20261006-224252",
         "generic": "sl8-video"
       },
       "base": {
-        "template": "sl8-base",
-        "version": "v20260924-015025"
+        "template": "sl8-image",
+        "version": "v20261006-011022"
       },
       "packs": [
         {
@@ -634,86 +640,26 @@
           "agentGuidance": "This machine carries its own operating contract: /home/user/AGENTS.md (read natively by Codex and Pi) and /home/user/CLAUDE.md (which imports AGENTS.md for Claude Code). It was rendered for this exact image, so the tools and versions it lists are the ones installed. Read AGENTS.md for where work goes and what this machine can do; `sl8-agent` hands the same contract to every run, including resumes. This run's parameters — autonomy, model, what you may spend — are in .sl8/run.json when a run was provisioned; no such file means no run parameters were set."
         },
         {
-          "id": "python-runtime",
-          "version": "1.0.0",
-          "description": "Python 3 + pip + venv + build tooling for native extensions.",
-          "provides": [
-            "python3",
-            "pip3",
-            "venv"
-          ],
-          "agentGuidance": "Python 3 is at `python3` (no unversioned `python`). Use `pip3 install --break-system-packages <pkg>` for system-wide installs (this image follows PEP 668), or `python3 -m venv .venv && source .venv/bin/activate` for a project-local venv. Native-extension build tools (build-essential, pkg-config, python3-dev) are present, so packages like Pillow, lxml, manim can compile from source if needed."
-        },
-        {
-          "id": "ffmpeg",
-          "version": "1.0.0",
-          "description": "FFmpeg for video/audio encoding and frame-to-MP4 assembly.",
-          "provides": [
-            "ffmpeg",
-            "ffprobe"
-          ],
-          "agentGuidance": "Use `ffmpeg -i <input> <output>` for transcoding, `ffmpeg -framerate <fps> -i frame_%04d.png out.mp4` for frame sequences, and `ffprobe -v quiet -print_format json -show_format -show_streams <file>` to inspect media. The Debian ffmpeg build includes the common codecs (libx264, libvpx, aac); use `-c:v libx264 -pix_fmt yuv420p` for broadly-compatible MP4 output."
-        },
-        {
-          "id": "fonts",
-          "version": "1.1.0",
-          "description": "Curated font set for caption/composition rendering: DejaVu family (Sans, Sans Oblique, Serif Italic at guaranteed paths) + Comic Neue (OFL casual), plus an embeddable OFL webfont pack (Inter, Outfit, Fraunces, Anton, Space Grotesk) for legible, consistent HyperFrames/video compositions. fontconfig (fc-list/fc-match) for discovery.",
-          "provides": [
-            "fc-list",
-            "fc-match",
-            "DejaVu Sans",
-            "DejaVu Serif",
-            "Comic Neue",
-            "Inter",
-            "Outfit",
-            "Fraunces",
-            "Anton",
-            "Space Grotesk"
-          ],
-          "agentGuidance": "Fonts are pre-installed — do NOT probe the filesystem or fetch fonts at runtime. Guaranteed TTF paths for ffmpeg drawtext fontfile=: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf (clean sans, default), /usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf (sans oblique), /usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf (serif italic). Casual/handwriting: Comic Neue (OFL; resolve with `fc-match -f '%{file}' 'Comic Neue'`). Embeddable webfonts for compositions (HyperFrames HTML/CSS or ffmpeg drawtext font='...'): Inter, Outfit, Fraunces, Anton, Space Grotesk — installed under /usr/share/fonts/truetype/sl8-webfonts and registered with fontconfig, so reference by family name (e.g. `font='Inter'`) or resolve a file with `fc-match -f '%{file}' 'Outfit'`. `fc-list` enumerates everything installed. ffmpeg's drawtext is built with fontconfig, so family names work as an alternative to fontfile=."
-        },
-        {
-          "id": "imagemagick",
-          "version": "1.0.0",
-          "description": "ImageMagick 6 (convert, identify, montage, mogrify) for raster image manipulation and animated GIF assembly from PNG frames.",
-          "provides": [
-            "convert",
-            "identify",
-            "montage",
-            "mogrify"
-          ],
-          "agentGuidance": "Debian ships the ImageMagick 6.x series: the entry point is `convert` (plus `identify`, `montage`, `mogrify`) — there is NO `magick` binary, do not call it. Assemble animated GIFs from PNG frames with `convert -delay 20 -loop 0 frame-*.png out.gif` (delay is in 1/100ths of a second; -loop 0 = infinite). Inspect images with `identify <file>` (one line per GIF frame). Raster formats (PNG/JPEG/GIF/WebP) are unrestricted; the default security policy only limits ghostscript-backed coders like PDF/PS."
-        },
-        {
-          "id": "jq",
-          "version": "1.0.0",
-          "description": "jq — command-line JSON processor for parsing and transforming JSON in shell pipelines.",
-          "provides": [
-            "jq"
-          ],
-          "agentGuidance": "Use `jq` to parse JSON in shell scripts — e.g. `ffprobe -v error -print_format json -show_format -show_streams in.mp4 | jq -r '.format.duration'`. `-e` makes the exit code follow the filter's truthiness (use it for assertions); `-r` prints raw strings without quotes. `sl8-capabilities | jq '.packs[].id'` lists this sandbox's installed packs."
-        },
-        {
-          "id": "video-suite",
-          "version": "1.4.0",
-          "description": "Bakes the video-studio skill suite (locked registry pins: the video-router + the explainer-video, cinematic-video, character-episode and keyframe-scene workflows + the six domain skills) into /home/user/.claude/skills — the studio template rule: sessions never re-install what every session needs. Suite source of truth: the release lockfile (studio/video-studio/releases/vN/suite.lock.json). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "id": "media-video-suite",
+          "version": "1.0.3",
+          "description": "Bakes the video-studio media skills into /home/user/.claude/skills (via .agents/skills) on top of sl8-image's five: media-video-generation (video intent to endpoint, motion check), media-audio-generation (voice-over, music bed, SFX, transcription, voice registry), media-shot-craft (shot wording), media-script-writer (timed narration script), media-video-production (multi-shot job with gates, mix, duck, one final encode), media-motion-graphics (titles and overlays with PIL and ffmpeg) and media-h3-prompter (MiniMax H3 prompts). Also installs media-qc 1.1.0 (the video checks), media-ai-gen 1.0.2 and media-image-generation 1.0.2 (hand-offs that load a skill) over the inherited copies, in place. Repurposed from fal's skills with recorded deltas (studio/video-studio/adaptations.md). No router and no job workflow. Applied only FROM sl8-image (it needs the imaging stack, ffmpeg and fonts that sl8-image bakes). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. Writes /etc/pip.conf with no-index = true so a job cannot pip-install from the network (house rule HR21, enforced by the machine since 1.0.1); a template derived from this one that needs pip at build time unsets it in its own build step.",
           "provides": [
             "baked-skill-suite"
           ],
-          "agentGuidance": "The video-studio suite is PRE-INSTALLED at /home/user/.claude/skills, and it now has a ROUTER. **Start at video-router for any video request** unless the user named a workflow outright. It checks disk first (a returning project outranks any keyword), picks exactly ONE of four creation workflows from its routing table, and hands over without planning or spending — a router that renders has mis-routed. The four doors: (1) narrated explainer with a voiceover -> explainer-video. (2) a one-off character piece, no narration -> cinematic-video. (3) an episode of a recurring series, or 'the same character as last time' -> character-episode, which REUSES a channel seed kit and never regenerates it (regenerating produces a new face wearing the old description). (4) a shot whose ENDING is specified — a reveal, a morph, 'start here and end there' -> keyframe-scene, which pins both endpoint frames and whose prompt describes the TRANSITION, never the scene. Common law across all four: the plan JSON is approved before any paid call; style.md before any frame; every frame APPROVED before motion spend (re-roll stills, ~25x cheaper); QC input gates before assembly; frame-extraction + contact sheet before any delivery claim. explainer-video adds: every VO take MEASURED before any duration is set. cinematic-video and character-episode add: the frozen CHARACTER_BLOCK reused VERBATIM in every shot prompt, behind a free pre-spend identity gate. keyframe-scene adds: a free endpoint gate (a pair with identical ends cannot interpolate; a broken carry chain is a jump cut) and QC-16, delivered-vs-declared on tier and audio. PAID CALLS: ai-gen only, contract has ONE home — video-prompting/SKILL.md, including the charged-vs-uncharged table (422/7/13/10) AND the RUN-level ceiling: state it from the approved plan, track cumulatively, stop at it with what you have. Read assembly-qc/references/models-and-gotchas.md BEFORE debugging any failure."
+          "agentGuidance": "The media skills are PRE-INSTALLED, twelve in all: the Image five (media-ai-gen, media-image-generation, media-photo-editing, media-character-sheet, media-qc) and the Video seven (media-video-generation, media-audio-generation, media-shot-craft, media-script-writer, media-video-production, media-motion-graphics, media-h3-prompter). Do NOT reinstall or update them. A multi-shot video from a brief starts at media-video-production, which plans it in artifacts/<project>/plan.json and hands each stage to the others; one clip starts at media-video-generation. Every model call goes through media-ai-gen (ai-gen), and every media-* skill follows its house rules (HR-1.0, media-ai-gen/references/house-rules.md): declare then assert, cost first, never re-fire a job, gates instead of questions (a spend gate stops the job partial; the next job runs gate.mjs status and resumes), checks are scripts (media-qc/scripts/mediaqc.mjs measures streams, loudness, the duck and motion as well as images). Text, titles and end cards are drawn locally by media-motion-graphics (Pillow, then one ffmpeg encode), never generated. The local tools come from sl8-image: Pillow, numpy and OpenCV pinned (never pip install), ffmpeg and ffprobe, the fonts pack (DejaVu Sans Bold; Inter, Outfit and Space Grotesk as variable fonts) and ImageMagick 6 (convert; there is no magick). There is no router: a job-specific workflow comes from the bot that runs here. Deliverables go under /home/user/artifacts/<project>/ with a manifest (media-ai-gen/scripts/manifest.mjs). Package downloads are disabled on this machine (/etc/pip.conf no-index): never install tools or models at runtime; if a paid step cannot run, open the spend gate and end the job partial."
         }
       ],
       "ui": {
         "displayName": "Video",
         "emoji": "🎞️",
-        "tagline": "Cutting, encoding and captioning — for Specialists who ship video.",
-        "description": "Everything in General, plus a local video-assembly toolchain: ffmpeg/ffprobe with the full normalize-concat-caption feature set (zoompan, drawtext, concat demuxer, anoisesrc/amix audio beds), ImageMagick for animated GIF assembly, a curated caption-font set (DejaVu family + Comic Neue at guaranteed paths), jq, and Python 3.11. Generation stays remote via ai-gen — pick this when a bot needs to cut, normalize, caption, and package clips into finished MP4s.",
+        "tagline": "Short narrated videos from stills — for Specialists who ship video.",
+        "description": "Everything in Image (the stills machine on Base), plus seven video skills adapted from fal's: route and render clips through ai-gen (Seedance, H3, Veo, Kling and more), write shots and timed narration, voice-over and music, overlays and titles, and run a multi-stage production with spend gates and one final encode. media-qc 1.1.0 measures streams, motion, loudness and ducking; every generation is recorded in a manifest with its credits. Pick this when a bot needs to turn a brief and a few stills into a finished MP4.",
         "capabilities": [
-          "Cutting & encoding",
-          "Captions & subtitles",
-          "Format conversion",
-          "Stills & thumbnails",
-          "Audio cleanup"
+          "Image to video",
+          "Narrated shorts",
+          "Multi-shot sequences",
+          "Titles & overlays",
+          "Measured audio & video QC"
         ],
         "brand": {
           "accent": {
@@ -722,23 +668,7 @@
             "solid": "#14B8A6"
           }
         },
-        "packageOverrides": {
-          "ffmpeg": {
-            "blurb": "Cut, normalize, caption, and stitch clips into finished MP4s."
-          },
-          "imagemagick": {
-            "blurb": "Assemble PNG frames into animated GIFs and inspect or convert images."
-          },
-          "fonts": {
-            "blurb": "DejaVu + Comic Neue + embeddable webfonts (Inter, Outfit, Fraunces, Anton, Space Grotesk) at known paths, ready for caption cards."
-          },
-          "jq": {
-            "blurb": "Parse and transform JSON right in the shell."
-          },
-          "python-runtime": {
-            "blurb": "Python 3.11 with pip and venv for scripting and data wrangling."
-          }
-        }
+        "packageOverrides": {}
       }
     }
   ],
