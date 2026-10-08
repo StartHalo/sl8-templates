@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-07T00:34:29Z",
-  "sourceCommit": "b40e133a7278cc7e26b3d7e3ac17543b9d6eb609",
+  "generatedAt": "2026-10-08T04:07:29Z",
+  "sourceCommit": "63fc4609df0d48bc6ab4aaab4032a0e0e579dfdb",
   "templates": [
     {
       "name": "sl8-base",
@@ -237,9 +237,9 @@
     {
       "name": "sl8-image",
       "status": "active",
-      "currentVersion": "v20261006-011022",
+      "currentVersion": "v20261008-030405",
       "aliases": {
-        "versioned": "sl8-image:v20261006-011022",
+        "versioned": "sl8-image:v20261008-030405",
         "generic": "sl8-image"
       },
       "base": {
@@ -321,12 +321,12 @@
         },
         {
           "id": "media-image-suite",
-          "version": "1.0.1",
-          "description": "Bakes the image-studio media skills into /home/user/.claude/skills (via .agents/skills): media-ai-gen (run ai-gen, house rules, manifest, gates), media-image-generation (image intent to endpoint, craft), media-photo-editing (deterministic edits), media-character-sheet (identity sheets) and media-qc (deterministic checks). Repurposed from fal's skills with recorded deltas (studio/image-studio/adaptations.md). No router and no job workflow. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "version": "1.0.2",
+          "description": "Bakes the image-studio media skills into /home/user/.claude/skills (via .agents/skills): media-ai-gen (run ai-gen, house rules, manifest, gates), media-image-generation (image intent to endpoint, craft), media-photo-editing (deterministic edits), media-character-sheet (identity sheets) and media-qc (deterministic checks). Repurposed from fal's skills with recorded deltas (studio/image-studio/adaptations.md). No router and no job workflow. Closes the package index system-wide (/etc/pip.conf no-index, since 1.0.2) so a job cannot pip-install from the network. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite"
           ],
-          "agentGuidance": "The media skills are PRE-INSTALLED (media-ai-gen, media-image-generation, media-photo-editing, media-character-sheet, media-qc). Do NOT reinstall. Every model call goes through media-ai-gen (ai-gen), and every media-* skill follows its house rules (HR-1.0, media-ai-gen/references/house-rules.md): declare then assert, cost first, never re-fire a job, gates instead of questions, checks are scripts. There is no router: a job-specific workflow comes from the bot that runs here. Deliverables go under /home/user/artifacts/<project>/ with a manifest (media-ai-gen/scripts/manifest.mjs)."
+          "agentGuidance": "The media skills are PRE-INSTALLED (media-ai-gen, media-image-generation, media-photo-editing, media-character-sheet, media-qc). Do NOT reinstall. Every model call goes through media-ai-gen (ai-gen), and every media-* skill follows its house rules (HR-1.0, media-ai-gen/references/house-rules.md): declare then assert, cost first, never re-fire a job, gates instead of questions, checks are scripts. There is no router: a job-specific workflow comes from the bot that runs here. Deliverables go under /home/user/artifacts/<project>/ with a manifest (media-ai-gen/scripts/manifest.mjs). Package downloads are disabled on this machine (/etc/pip.conf no-index); python-runtime's pip line does not apply here: never install tools or models at runtime; if a paid step cannot run, open the spend gate and end the job partial."
         }
       ],
       "ui": {
