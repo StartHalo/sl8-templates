@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-08T04:07:29Z",
-  "sourceCommit": "63fc4609df0d48bc6ab4aaab4032a0e0e579dfdb",
+  "generatedAt": "2026-10-08T20:52:22Z",
+  "sourceCommit": "cca3efe0127dc30be469df2920b377223e47c2c6",
   "templates": [
     {
       "name": "sl8-base",
@@ -622,14 +622,14 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20261006-224252",
+      "currentVersion": "v20261008-141457",
       "aliases": {
-        "versioned": "sl8-video:v20261006-224252",
+        "versioned": "sl8-video:v20261008-141457",
         "generic": "sl8-video"
       },
       "base": {
         "template": "sl8-image",
-        "version": "v20261006-011022"
+        "version": "v20261008-030405"
       },
       "packs": [
         {
@@ -641,8 +641,8 @@
         },
         {
           "id": "media-video-suite",
-          "version": "1.0.3",
-          "description": "Bakes the video-studio media skills into /home/user/.claude/skills (via .agents/skills) on top of sl8-image's five: media-video-generation (video intent to endpoint, motion check), media-audio-generation (voice-over, music bed, SFX, transcription, voice registry), media-shot-craft (shot wording), media-script-writer (timed narration script), media-video-production (multi-shot job with gates, mix, duck, one final encode), media-motion-graphics (titles and overlays with PIL and ffmpeg) and media-h3-prompter (MiniMax H3 prompts). Also installs media-qc 1.1.0 (the video checks), media-ai-gen 1.0.2 and media-image-generation 1.0.2 (hand-offs that load a skill) over the inherited copies, in place. Repurposed from fal's skills with recorded deltas (studio/video-studio/adaptations.md). No router and no job workflow. Applied only FROM sl8-image (it needs the imaging stack, ffmpeg and fonts that sl8-image bakes). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. Writes /etc/pip.conf with no-index = true so a job cannot pip-install from the network (house rule HR21, enforced by the machine since 1.0.1); a template derived from this one that needs pip at build time unsets it in its own build step.",
+          "version": "1.0.6",
+          "description": "Bakes the video-studio media skills into /home/user/.claude/skills (via .agents/skills) on top of sl8-image's five: media-video-generation (video intent to endpoint, motion check), media-audio-generation (voice-over, music bed, SFX, transcription, voice registry), media-shot-craft (shot wording), media-script-writer (timed narration script), media-video-production (multi-shot job with gates, mix, duck, one final encode), media-motion-graphics (titles and overlays with PIL and ffmpeg) and media-h3-prompter (MiniMax H3 prompts). It installs no skill sl8-image bakes: the Image five (media-qc 1.1.0, media-ai-gen 1.0.3, media-image-generation 1.0.2 and the others) are inherited from sl8-image 1.0.1 unchanged. Repurposed from fal's skills with recorded deltas (studio/video-studio/adaptations.md). No router and no job workflow. Applied only FROM sl8-image (it needs the imaging stack, ffmpeg and fonts that sl8-image bakes). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. Package downloads stay disabled by the /etc/pip.conf (no-index) that sl8-image 1.0.1's media-image-suite 1.0.2 writes (house rule HR21).",
           "provides": [
             "baked-skill-suite"
           ],
