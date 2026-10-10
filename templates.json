@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-08T20:52:22Z",
-  "sourceCommit": "cca3efe0127dc30be469df2920b377223e47c2c6",
+  "generatedAt": "2026-10-10T19:42:06Z",
+  "sourceCommit": "1230b5c38c02328e8cfde55f9a4a8af380fa05ec",
   "templates": [
     {
       "name": "sl8-base",
       "status": "active",
-      "currentVersion": "v20261003-191831",
+      "currentVersion": "v20261010-184536",
       "aliases": {
-        "versioned": "sl8-base:v20261003-191831",
+        "versioned": "sl8-base:v20261010-184536",
         "generic": "sl8-base"
       },
       "components": [
