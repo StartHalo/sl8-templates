@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-12T19:57:05Z",
-  "sourceCommit": "57d265924188833faaea480e8489ed18d911d752",
+  "generatedAt": "2026-10-15T23:25:12Z",
+  "sourceCommit": "c9ccd1dc48e828930be28a2f44494b40de0f3132",
   "templates": [
     {
       "name": "sl8-base",
@@ -237,9 +237,9 @@
     {
       "name": "sl8-image",
       "status": "active",
-      "currentVersion": "v20261010-200117",
+      "currentVersion": "v20261014-050259",
       "aliases": {
-        "versioned": "sl8-image:v20261010-200117",
+        "versioned": "sl8-image:v20261014-050259",
         "generic": "sl8-image"
       },
       "base": {
@@ -321,7 +321,7 @@
         },
         {
           "id": "media-image-suite",
-          "version": "1.0.2",
+          "version": "1.0.3",
           "description": "Bakes the image-studio media skills into /home/user/.claude/skills (via .agents/skills): media-ai-gen (run ai-gen, house rules, manifest, gates), media-image-generation (image intent to endpoint, craft), media-photo-editing (deterministic edits), media-character-sheet (identity sheets) and media-qc (deterministic checks). Repurposed from fal's skills with recorded deltas (studio/image-studio/adaptations.md). No router and no job workflow. Closes the package index system-wide (/etc/pip.conf no-index, since 1.0.2) so a job cannot pip-install from the network. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite"
