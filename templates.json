@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-15T23:25:12Z",
-  "sourceCommit": "c9ccd1dc48e828930be28a2f44494b40de0f3132",
+  "generatedAt": "2026-10-16T04:07:35Z",
+  "sourceCommit": "0d5623c4b77284d80efbf5fb7524d58c879a97de",
   "templates": [
     {
       "name": "sl8-base",
@@ -621,14 +621,14 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20261010-202436",
+      "currentVersion": "v20261016-002602",
       "aliases": {
-        "versioned": "sl8-video:v20261010-202436",
+        "versioned": "sl8-video:v20261016-002602",
         "generic": "sl8-video"
       },
       "base": {
         "template": "sl8-image",
-        "version": "v20261010-200117"
+        "version": "v20261014-050259"
       },
       "packs": [
         {
@@ -640,12 +640,12 @@
         },
         {
           "id": "media-video-suite",
-          "version": "1.0.6",
-          "description": "Bakes the video-studio media skills into /home/user/.claude/skills (via .agents/skills) on top of sl8-image's five: media-video-generation (video intent to endpoint, motion check), media-audio-generation (voice-over, music bed, SFX, transcription, voice registry), media-shot-craft (shot wording), media-script-writer (timed narration script), media-video-production (multi-shot job with gates, mix, duck, one final encode), media-motion-graphics (titles and overlays with PIL and ffmpeg) and media-h3-prompter (MiniMax H3 prompts). It installs no skill sl8-image bakes: the Image five (media-qc 1.1.0, media-ai-gen 1.0.3, media-image-generation 1.0.2 and the others) are inherited from sl8-image 1.0.1 unchanged. Repurposed from fal's skills with recorded deltas (studio/video-studio/adaptations.md). No router and no job workflow. Applied only FROM sl8-image (it needs the imaging stack, ffmpeg and fonts that sl8-image bakes). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. Package downloads stay disabled by the /etc/pip.conf (no-index) that sl8-image 1.0.1's media-image-suite 1.0.2 writes (house rule HR21).",
+          "version": "1.0.7",
+          "description": "Bakes the video-studio media skills into /home/user/.claude/skills (via .agents/skills) on top of sl8-image's five: media-video-generation (video intent to endpoint, motion check), media-audio-generation (voice-over, music bed, SFX, transcription, voice registry), media-shot-craft (shot wording), media-script-writer (timed narration script), media-video-production (multi-shot job with gates, mix, duck, one final encode), media-motion-graphics (titles and overlays with PIL and ffmpeg) and media-h3-prompter (MiniMax H3 prompts). It installs no skill sl8-image bakes: the Image five (media-qc 1.1.0, media-ai-gen 1.1.0, media-image-generation 1.0.3 and the others) are inherited from sl8-image 1.2.0 unchanged. Repurposed from fal's skills with recorded deltas (studio/video-studio/adaptations.md). No router and no job workflow. Applied only FROM sl8-image (it needs the imaging stack, ffmpeg and fonts that sl8-image bakes). Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. Package downloads stay disabled by the /etc/pip.conf (no-index) that sl8-image 1.0.1's media-image-suite 1.0.2 writes (house rule HR21).",
           "provides": [
             "baked-skill-suite"
           ],
-          "agentGuidance": "The media skills are PRE-INSTALLED, twelve in all: the Image five (media-ai-gen, media-image-generation, media-photo-editing, media-character-sheet, media-qc) and the Video seven (media-video-generation, media-audio-generation, media-shot-craft, media-script-writer, media-video-production, media-motion-graphics, media-h3-prompter). Do NOT reinstall or update them. A multi-shot video from a brief starts at media-video-production, which plans it in artifacts/<project>/plan.json and hands each stage to the others; one clip starts at media-video-generation. Every model call goes through media-ai-gen (ai-gen), and every media-* skill follows its house rules (HR-1.0, media-ai-gen/references/house-rules.md): declare then assert, cost first, never re-fire a job, gates instead of questions (a spend gate stops the job partial; the next job runs gate.mjs status and resumes), checks are scripts (media-qc/scripts/mediaqc.mjs measures streams, loudness, the duck and motion as well as images). Text, titles and end cards are drawn locally by media-motion-graphics (Pillow, then one ffmpeg encode), never generated. The local tools come from sl8-image: Pillow, numpy and OpenCV pinned (never pip install), ffmpeg and ffprobe, the fonts pack (DejaVu Sans Bold; Inter, Outfit and Space Grotesk as variable fonts) and ImageMagick 6 (convert; there is no magick). There is no router: a job-specific workflow comes from the bot that runs here. Deliverables go under /home/user/artifacts/<project>/ with a manifest (media-ai-gen/scripts/manifest.mjs). Package downloads are disabled on this machine (/etc/pip.conf no-index): never install tools or models at runtime; if a paid step cannot run, open the spend gate and end the job partial."
+          "agentGuidance": "The media skills are PRE-INSTALLED, twelve in all: the Image five (media-ai-gen, media-image-generation, media-photo-editing, media-character-sheet, media-qc) and the Video seven (media-video-generation, media-audio-generation, media-shot-craft, media-script-writer, media-video-production, media-motion-graphics, media-h3-prompter). Do NOT reinstall or update them. A multi-shot video from a brief starts at media-video-production, which plans it in artifacts/<project>/plan.json and hands each stage to the others; one clip starts at media-video-generation. Every model call goes through media-ai-gen (ai-gen), and every media-* skill follows its house rules (HR-1.0, media-ai-gen/references/house-rules.md): declare then assert, cost first, never re-fire a job, gates instead of questions (a spend gate stops the job partial; the next job runs gate.mjs status and resumes only on an approving answer, never after a Stop), checks are scripts (media-qc/scripts/mediaqc.mjs measures streams, loudness, the duck and motion as well as images). Text, titles and end cards are drawn locally by media-motion-graphics (Pillow, then one ffmpeg encode), never generated. The local tools come from sl8-image: Pillow, numpy and OpenCV pinned (never pip install), ffmpeg and ffprobe, the fonts pack (DejaVu Sans Bold; Inter, Outfit and Space Grotesk as variable fonts) and ImageMagick 6 (convert; there is no magick). There is no router: a job-specific workflow comes from the bot that runs here. Deliverables go under /home/user/artifacts/<project>/ with a manifest (media-ai-gen/scripts/manifest.mjs). Package downloads are disabled on this machine (/etc/pip.conf no-index): never install tools or models at runtime; if a paid step cannot run, open the spend gate and end the job partial."
         }
       ],
       "ui": {
