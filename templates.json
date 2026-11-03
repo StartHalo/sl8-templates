@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-03T05:02:39Z",
-  "sourceCommit": "fefa19225f834c4c2b76027dda6ee2f81cef9de7",
+  "generatedAt": "2026-11-03T22:58:17Z",
+  "sourceCommit": "d49ec6d46b973588da68df5381992910e712dc29",
   "templates": [
     {
       "name": "sl8-base",
@@ -389,14 +389,14 @@
     {
       "name": "sl8-motion",
       "status": "active",
-      "currentVersion": "v20261010-195728",
+      "currentVersion": "v20261101-213023",
       "aliases": {
-        "versioned": "sl8-motion:v20261010-195728",
+        "versioned": "sl8-motion:v20261101-213023",
         "generic": "sl8-motion"
       },
       "base": {
-        "template": "sl8-base",
-        "version": "v20261010-184536"
+        "template": "sl8-image",
+        "version": "v20261101-180640"
       },
       "packs": [
         {
@@ -407,66 +407,28 @@
           "agentGuidance": "This machine carries its own operating contract: /home/user/AGENTS.md (read natively by Codex and Pi) and /home/user/CLAUDE.md (which imports AGENTS.md for Claude Code). It was rendered for this exact image, so the tools and versions it lists are the ones installed. Read AGENTS.md for where work goes and what this machine can do; `sl8-agent` hands the same contract to every run, including resumes. This run's parameters — autonomy, model, what you may spend — are in .sl8/run.json when a run was provisioned; no such file means no run parameters were set."
         },
         {
-          "id": "python-runtime",
-          "version": "1.0.0",
-          "description": "Python 3 + pip + venv + build tooling for native extensions.",
-          "provides": [
-            "python3",
-            "pip3",
-            "venv"
-          ],
-          "agentGuidance": "Python 3 is at `python3` (no unversioned `python`). Use `pip3 install --break-system-packages <pkg>` for system-wide installs (this image follows PEP 668), or `python3 -m venv .venv && source .venv/bin/activate` for a project-local venv. Native-extension build tools (build-essential, pkg-config, python3-dev) are present, so packages like Pillow, lxml, manim can compile from source if needed."
-        },
-        {
-          "id": "ffmpeg",
-          "version": "1.0.0",
-          "description": "FFmpeg for video/audio encoding and frame-to-MP4 assembly.",
-          "provides": [
-            "ffmpeg",
-            "ffprobe"
-          ],
-          "agentGuidance": "Use `ffmpeg -i <input> <output>` for transcoding, `ffmpeg -framerate <fps> -i frame_%04d.png out.mp4` for frame sequences, and `ffprobe -v quiet -print_format json -show_format -show_streams <file>` to inspect media. The Debian ffmpeg build includes the common codecs (libx264, libvpx, aac); use `-c:v libx264 -pix_fmt yuv420p` for broadly-compatible MP4 output."
-        },
-        {
-          "id": "fonts",
-          "version": "1.1.0",
-          "description": "Curated font set for caption/composition rendering: DejaVu family (Sans, Sans Oblique, Serif Italic at guaranteed paths) + Comic Neue (OFL casual), plus an embeddable OFL webfont pack (Inter, Outfit, Fraunces, Anton, Space Grotesk) for legible, consistent HyperFrames/video compositions. fontconfig (fc-list/fc-match) for discovery.",
-          "provides": [
-            "fc-list",
-            "fc-match",
-            "DejaVu Sans",
-            "DejaVu Serif",
-            "Comic Neue",
-            "Inter",
-            "Outfit",
-            "Fraunces",
-            "Anton",
-            "Space Grotesk"
-          ],
-          "agentGuidance": "Fonts are pre-installed — do NOT probe the filesystem or fetch fonts at runtime. Guaranteed TTF paths for ffmpeg drawtext fontfile=: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf (clean sans, default), /usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf (sans oblique), /usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf (serif italic). Casual/handwriting: Comic Neue (OFL; resolve with `fc-match -f '%{file}' 'Comic Neue'`). Embeddable webfonts for compositions (HyperFrames HTML/CSS or ffmpeg drawtext font='...'): Inter, Outfit, Fraunces, Anton, Space Grotesk — installed under /usr/share/fonts/truetype/sl8-webfonts and registered with fontconfig, so reference by family name (e.g. `font='Inter'`) or resolve a file with `fc-match -f '%{file}' 'Outfit'`. `fc-list` enumerates everything installed. ffmpeg's drawtext is built with fontconfig, so family names work as an alternative to fontfile=."
-        },
-        {
-          "id": "chrome-headless",
-          "version": "1.0.0",
-          "description": "Shared system libraries required to run a headless Chrome / Chrome Headless Shell on Debian Bookworm. Installs no browser binary — downstream packs (e.g. remotion) fetch their own Chrome.",
-          "provides": [
-            "chrome-headless-libs"
-          ],
-          "agentGuidance": "Provides the native shared libraries a headless Chromium needs (NSS, GBM/Mesa, ALSA, ATK + ATK-bridge, Cairo/Pango, X composite/damage/fixes/randr, CUPS, dbus). It installs NO browser binary — tools that drive headless Chrome (Remotion, Puppeteer, Playwright) must download or point at their own Chromium build; this pack only guarantees the OS-level .so dependencies resolve. If a render fails with `error while loading shared libraries: libXXX.so: cannot open shared object file`, the missing library belongs here."
-        },
-        {
           "id": "hyperframes",
-          "version": "1.5.0",
-          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP -> deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. Ships 0.8.61 — 53 releases on from the 0.8.8 this pack carried since 2026-08-22. `check` remains the unified verification gate (lint + headless-browser runtime/layout/motion/contrast audit in one pass). A PINNED Chrome Headless Shell (the build the CLI itself uses) is pre-installed where its renderer looks, and its path frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink). OFFLINE CLOSURE (1.5.0): `hyperframes` on PATH is a wrapper that stops the CLI updating itself and loads /opt/sl8/offline/hf-offline.mjs, which serves the baked GSAP copies for cdn.jsdelivr.net URLs and answers Google Fonts locally, so a render needs no network and behaves the same with or without one. THE INSTALL IS CHOWNED TO `user` (1.4.0): the CLI repairs itself at runtime, and against a root-owned tree that repair half-completes and deletes the CLI — measured, see pack.ts. Local-only/keyless render core: voiceover/captions/background-removal come from AI Gen; HeyGen cloud features and @hyperframes/aws-lambda are excluded.",
+          "version": "1.7.1",
+          "description": "HeyGen HyperFrames CLI (HTML/CSS/GSAP -> deterministic MP4 via headless Chrome + ffmpeg). Requires Node 22+. Ships 0.8.61 — 53 releases on from the 0.8.8 this pack carried since 2026-08-22. `check` remains the unified verification gate (lint + headless-browser runtime/layout/motion/contrast audit in one pass). A PINNED Chrome Headless Shell (the build the CLI itself uses) is pre-installed where its renderer looks, and its path frozen at /etc/sl8/chrome-path (+ /opt/chrome/chrome symlink). OFFLINE CLOSURE (1.5.0): `hyperframes` on PATH is a wrapper that stops the CLI updating itself and loads /opt/sl8/offline/hf-offline.mjs, which serves the baked GSAP copies for cdn.jsdelivr.net URLs and answers Google Fonts locally, so a render needs no network and behaves the same with or without one. THE INSTALL IS CHOWNED TO `user` (1.4.0): the CLI repairs itself at runtime, and against a root-owned tree that repair half-completes and deletes the CLI — measured, see pack.ts. Local-only/keyless render core: voiceover/captions/background-removal come from AI Gen; HeyGen cloud features and @hyperframes/aws-lambda are excluded. 1.6.0 (HyperFrames 5.1.0): also espeak-ng (a local voice) and esbuild 0.28.2 (the Remotion port), kokoro-onnx 0.4.9 + soundfile with the Kokoro model and voices in ~/.cache/hyperframes/tts (`hyperframes tts` offline), librosa 0.11.0 (the beat-grid analyzer) and @hyperframes/producer + @hyperframes/core at the CLI's version in ~/.agents/node_modules (animation-map.mjs); the pack assumes python-runtime, ffmpeg and chrome-headless, which the Image parent supplies. 1.7.0: whisper.cpp v1.8.7 (static whisper-cli) and the small.en model, so `hyperframes transcribe` runs offline; under HR-1.1 pip installs need no exception. Also poppler-utils (pdftotext, pdftoppm) for PDF sources (motion-doc-explainer). 1.7.1: 1.7.0 changed after it was used on build b5f84b12 (poppler-utils and the display-fonts declaration were added to the same version); this version carries both. Declares display-fonts: the static Montserrat and TikTok Sans weights that the Image parent's fonts pack installs in /usr/share/fonts/truetype/sl8-display; a verify row checks the files and fontconfig (this pack installs no font itself). display-fonts covers exactly the two families the verify row checks, Montserrat and TikTok Sans (static weights from the Image parent's fonts pack). Caveat, PatrickHand, PermanentMarker and Metropolis, named on the assessed machine, are NOT baked.",
           "provides": [
-            "hyperframes"
+            "hyperframes",
+            "espeak-ng",
+            "esbuild",
+            "kokoro-onnx",
+            "librosa",
+            "@hyperframes/producer",
+            "whisper-cli",
+            "pdftotext",
+            "pdftoppm",
+            "poppler-utils",
+            "display-fonts"
           ],
-          "agentGuidance": "HeyGen HyperFrames renders HTML/CSS/GSAP compositions to MP4 via headless Chrome (Puppeteer beginFrame seeking) + ffmpeg. The CLI is global (`hyperframes`). Flow: `hyperframes init <dir> --non-interactive` to scaffold, edit the composition + animation tracks, verify with `hyperframes check` (the canonical gate: lint + headless-browser runtime/layout/motion/WCAG audit; exit 0 required), then `hyperframes render --output /home/user/artifacts/out.mp4 --non-interactive`. CHROME (pinned, offline): the Chrome Headless Shell the CLI uses is pre-staged; its absolute path is frozen at /etc/sl8/chrome-path and as the /opt/chrome/chrome symlink. `hyperframes doctor` auto-detects it; if a command needs it explicitly, pass `--chrome \"$(cat /etc/sl8/chrome-path)\"`. Do NOT trigger a Puppeteer/Chrome download and do NOT rely on image ENV (E2B `commands.run` does not inherit it). GSAP and FONTS OFFLINE: `hyperframes` here runs with an offline closure — https://cdn.jsdelivr.net/npm/gsap@3.14.2 (also 3.12.5, 3.15.0; gsap@3 = 3.14.2) is served from the machine, and Google Fonts requests are answered locally so bundled or installed faces are used. Use one of those GSAP URLs; any other version is refused. FONTS / OFFLINE CLOSURE (the render-time network is closed; a composition that reaches for a font at compile time is the most common way to break a sandbox render): (1) strip every `<link>` to fonts.googleapis.com / fonts.gstatic.com and every `@import` of a remote stylesheet; (2) map each family you want to one already packed in the image — list them with `fc-list : family | sort -u`; (3) declare it with `@font-face { font-family: '<Name>'; src: local('<Packed Family>'); }` INSIDE the composition wrapper, not in a sibling stylesheet, so the compiler inlines it; (4) verify by running the compile and confirming zero outbound font fetches, then `hyperframes check` exit 0. Never let the compiler resolve a family by name alone and never rely on a network retry — 0.8.x surfaces that failure as FONT_FETCH_UNAVAILABLE, which in a closed sandbox means a failed render, not a slow one. MEDIA (voiceover/captions/background-removal are NOT local — use AI Gen, keyless via the SL8 proxy): voiceover → `ai-gen audio tts \"<text>\" -m fal-ai/kokoro/american-english`; captions/timing → `ai-gen transcribe <audio>` (or `ai-gen audio stt <audio> -m fal-ai/wizper`); background removal → `ai-gen run fal-ai/bria/background/remove --image <img>`. Generate the asset with ai-gen, then reference the produced audio/image file in the composition / pass it to `hyperframes render`. Pillow is installed for local image preprocessing. EXCLUDED: HeyGen credentials, avatars, cloud/lambda/cloudrun render, `publish`, premium TTS/BGM, and @hyperframes/aws-lambda — never used. Requires Node 22+ (the base provides it); system ffmpeg is present (ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use `skills add hyperframes` for HyperFrames domain knowledge."
+          "agentGuidance": "HeyGen HyperFrames renders HTML/CSS/GSAP compositions to MP4 via headless Chrome (Puppeteer beginFrame seeking) + ffmpeg. The CLI is global (`hyperframes`). Flow: `hyperframes init <dir> --non-interactive` to scaffold, edit the composition + animation tracks, verify with `hyperframes check` (the canonical gate: lint + headless-browser runtime/layout/motion/WCAG audit; exit 0 required), then `hyperframes render --output /home/user/artifacts/out.mp4 --non-interactive`. CHROME (pinned, offline): the Chrome Headless Shell the CLI uses is pre-staged; its absolute path is frozen at /etc/sl8/chrome-path and as the /opt/chrome/chrome symlink. `hyperframes doctor` auto-detects it; if a command needs it explicitly, pass `--chrome \"$(cat /etc/sl8/chrome-path)\"`. Do NOT trigger a Puppeteer/Chrome download and do NOT rely on image ENV (E2B `commands.run` does not inherit it). GSAP and FONTS OFFLINE: `hyperframes` here runs with an offline closure — https://cdn.jsdelivr.net/npm/gsap@3.14.2 (also 3.12.5, 3.15.0; gsap@3 = 3.14.2) is served from the machine, and Google Fonts requests are answered locally so bundled or installed faces are used. Use one of those GSAP URLs; any other version is refused. FONTS / OFFLINE CLOSURE (the render-time network is closed; a composition that reaches for a font at compile time is the most common way to break a sandbox render): (1) strip every `<link>` to fonts.googleapis.com / fonts.gstatic.com and every `@import` of a remote stylesheet; (2) map each family you want to one already packed in the image — list them with `fc-list : family | sort -u`; (3) declare it with `@font-face { font-family: '<Name>'; src: local('<Packed Family>'); }` INSIDE the composition wrapper, not in a sibling stylesheet, so the compiler inlines it; (4) verify by running the compile and confirming zero outbound font fetches, then `hyperframes check` exit 0. Never let the compiler resolve a family by name alone and never rely on a network retry — 0.8.x surfaces that failure as FONT_FETCH_UNAVAILABLE, which in a closed sandbox means a failed render, not a slow one. MEDIA (voiceover/captions/background-removal are NOT local — use AI Gen, keyless via the SL8 proxy): voiceover → `ai-gen audio tts \"<text>\" -m fal-ai/kokoro/american-english`; captions/timing → `ai-gen transcribe <audio>` (or `ai-gen audio stt <audio> -m fal-ai/wizper`); background removal → `ai-gen run fal-ai/bria/background/remove --image <img>`. Generate the asset with ai-gen, then reference the produced audio/image file in the composition / pass it to `hyperframes render`. Pillow is installed for local image preprocessing. EXCLUDED: HeyGen credentials, avatars, cloud/lambda/cloudrun render, `publish`, premium TTS/BGM, and @hyperframes/aws-lambda — never used. Requires Node 22+ (the base provides it); system ffmpeg is present (ffmpeg pack). NOTE: the `remotion-best-practices` skill is for Remotion only — use `skills add hyperframes` for HyperFrames domain knowledge. Display fonts on the machine are Montserrat and TikTok Sans only; Caveat, PatrickHand, PermanentMarker and Metropolis are not installed: use a bundled family or a font file the project ships."
         },
         {
           "id": "hyperframes-suite",
-          "version": "1.3.0",
-          "description": "Bakes the hyperframes-studio tool-usage suite into /home/user/.claude/skills: the hyperframes-* domain skills, media-use, figma, the generic motion-graphics workflow and the 5-skill motion-quality doctrine chain, and pre-warms the npx cache for the project-pinned hyperframes CLI. No router: under the Studio machine policy (doc 16 §B.1 layer 7) routers and job-specific workflows belong to Factory bots. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "version": "1.4.1",
+          "description": "Bakes the hyperframes-studio tool-usage suite into /home/user/.claude/skills: the hyperframes-* domain skills, media-use, figma, the generic motion-graphics workflow and the 5-skill motion-quality doctrine chain, and pre-warms the npx cache for the project-pinned hyperframes CLI. No router: under the Studio machine policy (doc 16 §B.1 layer 7) routers and job-specific workflows belong to Factory bots. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. 1.4.0 (HyperFrames 5.1.0): 22 own skills, adding screen-web-capture, motion-doc-explainer and the general-video, remotion-to-hyperframes, slideshow, music-to-video and product-launch-video workflows at their registry versions. 1.4.1: motion-doc-explainer 1.0.1.",
           "provides": [
             "baked-skill-suite"
           ],
