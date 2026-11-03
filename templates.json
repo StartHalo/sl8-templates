@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-03T23:22:18Z",
-  "sourceCommit": "14afab0050abe7ad5f0e2d586bcc5addb4107e1e",
+  "generatedAt": "2026-11-03T23:29:47Z",
+  "sourceCommit": "d9074fbe233ec470c04a7f77b325b0844387ead8",
   "templates": [
     {
       "name": "sl8-base",
@@ -384,6 +384,63 @@
             "blurb": "Five image skills from fal, adapted with recorded changes: generation, photo editing, character sheets, the ai-gen runner and media-qc."
           }
         }
+      }
+    },
+    {
+      "name": "sl8-marketing",
+      "status": "active",
+      "currentVersion": "v20261102-024328",
+      "aliases": {
+        "versioned": "sl8-marketing:v20261102-024328",
+        "generic": "sl8-marketing"
+      },
+      "base": {
+        "template": "sl8-video",
+        "version": "v20261101-181153"
+      },
+      "packs": [
+        {
+          "id": "marketing-suite",
+          "version": "1.0.0",
+          "description": "Bakes marketing-studio's twelve skills into /home/user/.claude/skills (via .agents/skills) on top of the Video chain's: the eight workflow skills (marketing-branded-graphic, marketing-ad-localization, marketing-winner-analysis, marketing-thumbnail, marketing-brand-kit, marketing-campaign-pack, marketing-ad-remake, marketing-site-creator-video) and four companion skills (marketing-static-copywriting, marketing-static-ad-production, marketing-commercial, marketing-ugc). Also installs, from Debian's archive, librsvg2-bin (rsvg-convert), python3-fonttools with brotli, tesseract-ocr with the eng, deu, fra, spa, por, hin, ara, chi-sim and chi-tra language packs, and HarfBuzz shaping (libharfbuzz-bin hb-view, libraqm0, libfribidi0). Installs no skill a parent bakes and replaces none. No router and no job workflow beyond the skills' own. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. /etc/pip.conf (no-index, from sl8-image) is left as it is.",
+          "provides": [
+            "baked-skill-suite",
+            "rsvg-convert",
+            "librsvg2-bin",
+            "fonttools",
+            "tesseract",
+            "harfbuzz"
+          ],
+          "agentGuidance": "The Marketing skills are PRE-INSTALLED (twelve, on top of the Video, Image and Base chain's): the workflow skills marketing-branded-graphic (a branded static graphic from the supplied logo, palette and copy), marketing-ad-localization (static ads in other languages), marketing-winner-analysis (read-only winner selection from an ad-account export), marketing-thumbnail, marketing-brand-kit (capture or extract a brand kit), marketing-campaign-pack (a five-role launch pack), marketing-ad-remake, marketing-site-creator-video, and the companion method skills marketing-static-copywriting, marketing-static-ad-production, marketing-commercial and marketing-ugc. Do NOT reinstall or update them. Start at the workflow skill that names the job; it loads the others it needs, and every model call still goes through media-ai-gen. Local tools added here: rsvg-convert (render an SVG-only logo to PNG), Python fontTools (read font metadata), tesseract with eng, deu, fra, spa, por, hin, ara, chi_sim and chi_tra (read rendered text back), and HarfBuzz/raqm/fribidi shaping for Pillow (complex scripts such as Arabic and Devanagari). Package downloads are disabled (/etc/pip.conf no-index): never install tools, fonts or language packs at runtime; a missing language pack is a gap to report, not to fetch."
+        },
+        {
+          "id": "agent-contract",
+          "version": "1.1.0",
+          "description": "The machine's own operating contract, baked into /home/user: AGENTS.md and CLAUDE.md, rendered from the studio record for this exact template version (R42). The copy is written by studio/scripts/build.js beside the version's template.ts while the version is cut but not yet built, and this pack refuses to build a copy rendered for any other version or any other package pins. It bakes NO .sl8/studio.json: production's launcher replaces the two contract files on every launch but never touches .sl8/, so a baked spend ceiling of 0 would outlive the contract and stop a legacy bot from spending (2026-09-23). Run parameters arrive in .sl8/run.json at provisioning. The eval runner uploads its own copy only where the image carries none, so a run on this image proves the contract that ships.",
+          "provides": [],
+          "agentGuidance": "This machine carries its own operating contract: /home/user/AGENTS.md (read natively by Codex and Pi) and /home/user/CLAUDE.md (which imports AGENTS.md for Claude Code). It was rendered for this exact image, so the tools and versions it lists are the ones installed. Read AGENTS.md for where work goes and what this machine can do; `sl8-agent` hands the same contract to every run, including resumes. This run's parameters — autonomy, model, what you may spend — are in .sl8/run.json when a run was provisioned; no such file means no run parameters were set."
+        }
+      ],
+      "ui": {
+        "displayName": "Marketing",
+        "emoji": "📣",
+        "tagline": "Branded ads, thumbnails and campaign packs — for Specialists who sell with media.",
+        "description": "Everything in Video (stills, clips, voice, music and finished MP4s on Image and Base), plus the marketing workflow skills: branded static graphics and their translations, thumbnails, brand kits, campaign packs, ad remakes and site-to-creator videos. Pick this when a bot makes marketing assets from a brand and a brief.",
+        "capabilities": [
+          "Branded static ads",
+          "Ad localization",
+          "Thumbnails",
+          "Brand kits",
+          "Campaign packs"
+        ],
+        "brand": {
+          "accent": {
+            "from": "#F97316",
+            "to": "#FB923C",
+            "solid": "#EA580C"
+          }
+        },
+        "packageOverrides": {}
       }
     },
     {
