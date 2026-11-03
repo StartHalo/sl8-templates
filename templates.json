@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-03T22:58:17Z",
-  "sourceCommit": "d49ec6d46b973588da68df5381992910e712dc29",
+  "generatedAt": "2026-11-03T23:22:18Z",
+  "sourceCommit": "14afab0050abe7ad5f0e2d586bcc5addb4107e1e",
   "templates": [
     {
       "name": "sl8-base",
@@ -597,6 +597,58 @@
             "blurb": "Python 3.11 runtime (Pillow for image preprocessing)."
           }
         }
+      }
+    },
+    {
+      "name": "sl8-story",
+      "status": "active",
+      "currentVersion": "v20261102-033200",
+      "aliases": {
+        "versioned": "sl8-story:v20261102-033200",
+        "generic": "sl8-story"
+      },
+      "base": {
+        "template": "sl8-video",
+        "version": "v20261101-181153"
+      },
+      "packs": [
+        {
+          "id": "agent-contract",
+          "version": "1.1.0",
+          "description": "The machine's own operating contract, baked into /home/user: AGENTS.md and CLAUDE.md, rendered from the studio record for this exact template version (R42). The copy is written by studio/scripts/build.js beside the version's template.ts while the version is cut but not yet built, and this pack refuses to build a copy rendered for any other version or any other package pins. It bakes NO .sl8/studio.json: production's launcher replaces the two contract files on every launch but never touches .sl8/, so a baked spend ceiling of 0 would outlive the contract and stop a legacy bot from spending (2026-09-23). Run parameters arrive in .sl8/run.json at provisioning. The eval runner uploads its own copy only where the image carries none, so a run on this image proves the contract that ships.",
+          "provides": [],
+          "agentGuidance": "This machine carries its own operating contract: /home/user/AGENTS.md (read natively by Codex and Pi) and /home/user/CLAUDE.md (which imports AGENTS.md for Claude Code). It was rendered for this exact image, so the tools and versions it lists are the ones installed. Read AGENTS.md for where work goes and what this machine can do; `sl8-agent` hands the same contract to every run, including resumes. This run's parameters — autonomy, model, what you may spend — are in .sl8/run.json when a run was provisioned; no such file means no run parameters were set."
+        },
+        {
+          "id": "story-suite",
+          "version": "1.0.0",
+          "description": "Bakes the seven Story workflow skills into /home/user/.claude/skills (via .agents/skills) on top of the nineteen Video and Image skills the parent sl8-video already bakes: story-faceless-short (WF35), story-faceless-long (WF53), story-one-take-short (WF54), story-found-footage (WF37), story-sing-along (WF46), story-ranking-short (WF49) and story-youtube-script (WF55). It installs no skill its parent bakes and no tool: every requirement of their paths is the parent's. No router. Applied only FROM sl8-video. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "provides": [
+            "baked-skill-suite"
+          ],
+          "agentGuidance": "The seven Story workflow skills are PRE-INSTALLED beside the Video and Image skills: story-faceless-short (narrated short from a topic), story-faceless-long (long faceless video from a script), story-one-take-short (one lazy line to one prompt and one clip), story-found-footage (found-footage story), story-sing-along (kids sing-along on a master timeline), story-ranking-short (ranking short on a build-up ladder) and story-youtube-script (long-form YouTube script). Do NOT reinstall or update them. Each one hands generation to media-ai-gen and checks to media-qc, like every media-* skill; a spend gate stops the job partial. Package downloads are disabled (/etc/pip.conf no-index): never install tools at runtime. There is no router: a job-specific workflow comes from the bot that runs here."
+        }
+      ],
+      "ui": {
+        "displayName": "Story",
+        "emoji": "📖",
+        "tagline": "Narrated story videos and scripts — for Specialists who tell stories on video.",
+        "description": "Everything in Video (stills, clips, voice, music and finished MP4s on Image and Base), plus the story workflow skills: faceless narrated shorts and long videos, one-generation animated story shorts, found-footage stories, kids sing-alongs, ranking shorts and long-form YouTube scripts. Pick this when a bot turns an idea into a told story.",
+        "capabilities": [
+          "Faceless narrated shorts",
+          "Long narrated videos",
+          "Animated story shorts",
+          "Sing-alongs",
+          "YouTube scripts"
+        ],
+        "brand": {
+          "accent": {
+            "from": "#DB2777",
+            "to": "#F472B6",
+            "solid": "#EC4899"
+          }
+        },
+        "packageOverrides": {}
       }
     },
     {
