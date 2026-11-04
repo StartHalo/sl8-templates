@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-03T23:29:47Z",
-  "sourceCommit": "d9074fbe233ec470c04a7f77b325b0844387ead8",
+  "generatedAt": "2026-11-04T02:27:24Z",
+  "sourceCommit": "6f294e53602b87cffe6a24cc16091a8f7fefd0d4",
   "templates": [
     {
       "name": "sl8-base",
@@ -799,6 +799,72 @@
             "from": "#0EA5A5",
             "to": "#2DD4BF",
             "solid": "#14B8A6"
+          }
+        },
+        "packageOverrides": {}
+      }
+    },
+    {
+      "name": "sl8-web",
+      "status": "active",
+      "currentVersion": "v20261102-073141",
+      "aliases": {
+        "versioned": "sl8-web:v20261102-073141",
+        "generic": "sl8-web"
+      },
+      "base": {
+        "template": "sl8-motion",
+        "version": "v20261101-213023"
+      },
+      "packs": [
+        {
+          "id": "agent-contract",
+          "version": "1.1.0",
+          "description": "The machine's own operating contract, baked into /home/user: AGENTS.md and CLAUDE.md, rendered from the studio record for this exact template version (R42). The copy is written by studio/scripts/build.js beside the version's template.ts while the version is cut but not yet built, and this pack refuses to build a copy rendered for any other version or any other package pins. It bakes NO .sl8/studio.json: production's launcher replaces the two contract files on every launch but never touches .sl8/, so a baked spend ceiling of 0 would outlive the contract and stop a legacy bot from spending (2026-09-23). Run parameters arrive in .sl8/run.json at provisioning. The eval runner uploads its own copy only where the image carries none, so a run on this image proves the contract that ships.",
+          "provides": [],
+          "agentGuidance": "This machine carries its own operating contract: /home/user/AGENTS.md (read natively by Codex and Pi) and /home/user/CLAUDE.md (which imports AGENTS.md for Claude Code). It was rendered for this exact image, so the tools and versions it lists are the ones installed. Read AGENTS.md for where work goes and what this machine can do; `sl8-agent` hands the same contract to every run, including resumes. This run's parameters — autonomy, model, what you may spend — are in .sl8/run.json when a run was provisioned; no such file means no run parameters were set."
+        },
+        {
+          "id": "web-suite",
+          "version": "1.0.0",
+          "description": "Web Studio's own layer on the Motion machine: ripgrep, the glTF Transform CLI and Lighthouse, the web toolchain (react, three, react-dom, vite, typescript, tailwindcss with its Vite plugin, zod, lucide-react, @tanstack/react-start) installed globally and pre-cached for an offline project install together with better-sqlite3, and the three Web workflow skills baked at registry versions (web-marketing-site, web-generation-app, web-3d-showcase). No router and no job workflow beyond them. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
+          "provides": [
+            "baked-skill-suite",
+            "ripgrep",
+            "gltf-transform",
+            "lighthouse",
+            "react",
+            "react-dom",
+            "three",
+            "@types/react",
+            "vite",
+            "typescript",
+            "tailwindcss",
+            "@tailwindcss/vite",
+            "zod",
+            "lucide-react",
+            "@tanstack/react-start",
+            "better-sqlite3"
+          ],
+          "agentGuidance": "The Web workflow skills are PRE-INSTALLED at /home/user/.claude/skills: web-marketing-site (a marketing site with a scroll-played generated film), web-generation-app (an image and video generation web app) and web-3d-showcase (stills to GLB to a Three.js selector). Do NOT reinstall. Tools: `rg`, `gltf-transform`, `lighthouse`, `vite` and `tsc` are on PATH; react, react-dom, vite, typescript, tailwindcss (+ @tailwindcss/vite), zod, lucide-react and @tanstack/react-start are installed under `$(npm root -g)` and sit in the npm cache with better-sqlite3, so a project installs with `npm install --offline <pkg>` and never needs the network for them. A package outside this list is a machine gap: stop and report it."
+        }
+      ],
+      "ui": {
+        "displayName": "Web",
+        "emoji": "🌐",
+        "tagline": "Websites and web apps with generated media — for Specialists who ship to the browser.",
+        "description": "Everything in Motion (HyperFrames rendering, a pinned headless Chrome, fonts, ffmpeg and Python on Base), plus the web workflow skills: marketing websites with a scroll-played hero film, image and video generation web apps, and 3D model or character showcases. Pick this when a bot delivers a site or a web app.",
+        "capabilities": [
+          "Marketing websites",
+          "Generation web apps",
+          "3D showcases",
+          "Scroll-played hero films"
+        ],
+        "brand": {
+          "accent": {
+            "from": "#2563EB",
+            "to": "#60A5FA",
+            "solid": "#3B82F6"
           }
         },
         "packageOverrides": {}
