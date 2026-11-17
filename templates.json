@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-16T00:53:28Z",
-  "sourceCommit": "067beba956d54fda1a37e0a191816b6eff504458",
+  "generatedAt": "2026-11-17T03:18:22Z",
+  "sourceCommit": "f246ed87a6d1cdbf3089bf679c385daafc3908ce",
   "templates": [
     {
       "name": "sl8-base",
@@ -241,14 +241,14 @@
     {
       "name": "sl8-image",
       "status": "active",
-      "currentVersion": "v20261101-180640",
+      "currentVersion": "v20261117-031307",
       "aliases": {
-        "versioned": "sl8-image:v20261101-180640",
+        "versioned": "sl8-image:v20261117-031307",
         "generic": "sl8-image"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20261010-184536"
+        "version": "v20261115-171326"
       },
       "packs": [
         {
@@ -315,20 +315,10 @@
             "Noto Sans",
             "fonts-noto",
             "TikTok Sans",
-            "Montserrat"
+            "Montserrat",
+            "display-fonts"
           ],
           "agentGuidance": "Fonts are pre-installed — do NOT probe the filesystem or fetch fonts at runtime. Guaranteed TTF paths for ffmpeg drawtext fontfile=: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf (clean sans, default), /usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf (sans oblique), /usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf (serif italic). Casual/handwriting: Comic Neue (OFL; resolve with `fc-match -f '%{file}' 'Comic Neue'`). Embeddable webfonts for compositions (HyperFrames HTML/CSS or ffmpeg drawtext font='...'): Inter, Outfit, Fraunces, Anton, Space Grotesk — installed under /usr/share/fonts/truetype/sl8-webfonts and registered with fontconfig, so reference by family name (e.g. `font='Inter'`) or resolve a file with `fc-match -f '%{file}' 'Outfit'`. Non-Latin text: Noto Sans for Arabic, Devanagari and others and Noto Sans CJK for Japanese, Chinese and Korean are installed (fc-list :lang=ja). Static display weights live in /usr/share/fonts/truetype/sl8-display: Montserrat Thin to Black and TikTok Sans Light to Black (reference by family name and style, e.g. `Montserrat ExtraBold`). `fc-list` enumerates everything installed. ffmpeg's drawtext is built with fontconfig, so family names work as an alternative to fontfile=."
-        },
-        {
-          "id": "chrome-headless",
-          "version": "1.2.0",
-          "description": "Shared system libraries required to run a headless Chrome / Chrome Headless Shell on Debian Bookworm. Since 1.2.0 also the pinned Chrome Headless Shell on PATH and playwright (Image 1.5.0).",
-          "provides": [
-            "chrome-headless-libs",
-            "chrome-headless-shell",
-            "playwright"
-          ],
-          "agentGuidance": "Provides the native shared libraries a headless Chromium needs (NSS, GBM/Mesa, ALSA, ATK + ATK-bridge, Cairo/Pango, X composite/damage/fixes/randr, CUPS, dbus). Since 1.2.0 it also bakes Chrome Headless Shell 152.0.7977.30 (`chrome-headless-shell` on PATH, files under /opt/sl8/chrome-headless-shell) and playwright 1.64.1 with no browser of its own: launch the shell with `executablePath: '/usr/local/bin/chrome-headless-shell'` and never run `playwright install` (package downloads are disabled). If a render fails with `error while loading shared libraries: libXXX.so: cannot open shared object file`, the missing library belongs here."
         },
         {
           "id": "imagemagick",
@@ -344,7 +334,7 @@
         },
         {
           "id": "media-image-suite",
-          "version": "1.0.7",
+          "version": "1.0.9",
           "description": "Bakes the image-studio media skills into /home/user/.claude/skills (via .agents/skills): media-ai-gen (run ai-gen, house rules, manifest, gates), media-image-generation (image intent to endpoint, craft), media-photo-editing (deterministic edits), media-character-sheet (identity sheets) and media-qc (deterministic checks) and image-product-presets (45 fixed master prompts, one edit call per still). Repurposed from fal's skills with recorded deltas (studio/image-studio/adaptations.md). No router and no job workflow. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite"
