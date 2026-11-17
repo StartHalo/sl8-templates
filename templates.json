@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-17T06:17:27Z",
-  "sourceCommit": "52c29637fa6ffba0a399241a4abddf8d7e0c871f",
+  "generatedAt": "2026-11-17T06:32:13Z",
+  "sourceCommit": "db5061fb388f173c675a5b3a035b6ba32cd871b1",
   "templates": [
     {
       "name": "sl8-base",
@@ -440,14 +440,14 @@
     {
       "name": "sl8-motion",
       "status": "active",
-      "currentVersion": "v20261101-213023",
+      "currentVersion": "v20261117-033622",
       "aliases": {
-        "versioned": "sl8-motion:v20261101-213023",
+        "versioned": "sl8-motion:v20261117-033622",
         "generic": "sl8-motion"
       },
       "base": {
         "template": "sl8-image",
-        "version": "v20261101-180640"
+        "version": "v20261117-031307"
       },
       "packs": [
         {
@@ -478,7 +478,7 @@
         },
         {
           "id": "hyperframes-suite",
-          "version": "1.4.1",
+          "version": "1.4.3",
           "description": "Bakes the hyperframes-studio tool-usage suite into /home/user/.claude/skills: the hyperframes-* domain skills, media-use, figma, the generic motion-graphics workflow and the 5-skill motion-quality doctrine chain, and pre-warms the npx cache for the project-pinned hyperframes CLI. No router: under the Studio machine policy (doc 16 §B.1 layer 7) routers and job-specific workflows belong to Factory bots. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. 1.4.0 (HyperFrames 5.1.0): 22 own skills, adding screen-web-capture, motion-doc-explainer and the general-video, remotion-to-hyperframes, slideshow, music-to-video and product-launch-video workflows at their registry versions. 1.4.1: motion-doc-explainer 1.0.1.",
           "provides": [
             "baked-skill-suite"
@@ -653,14 +653,14 @@
     {
       "name": "sl8-story",
       "status": "active",
-      "currentVersion": "v20261117-054617",
+      "currentVersion": "v20261102-033200",
       "aliases": {
-        "versioned": "sl8-story:v20261117-054617",
+        "versioned": "sl8-story:v20261102-033200",
         "generic": "sl8-story"
       },
       "base": {
         "template": "sl8-video",
-        "version": "v20261117-031855"
+        "version": "v20261101-181153"
       },
       "packs": [
         {
@@ -672,7 +672,7 @@
         },
         {
           "id": "story-suite",
-          "version": "1.0.1",
+          "version": "1.0.0",
           "description": "Bakes the seven Story workflow skills into /home/user/.claude/skills (via .agents/skills) on top of the nineteen Video and Image skills the parent sl8-video already bakes: story-faceless-short (WF35), story-faceless-long (WF53), story-one-take-short (WF54), story-found-footage (WF37), story-sing-along (WF46), story-ranking-short (WF49) and story-youtube-script (WF55). It installs no skill its parent bakes and no tool: every requirement of their paths is the parent's. No router. Applied only FROM sl8-video. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite"
@@ -800,14 +800,14 @@
     {
       "name": "sl8-web",
       "status": "active",
-      "currentVersion": "v20261102-073141",
+      "currentVersion": "v20261117-061756",
       "aliases": {
-        "versioned": "sl8-web:v20261102-073141",
+        "versioned": "sl8-web:v20261117-061756",
         "generic": "sl8-web"
       },
       "base": {
         "template": "sl8-motion",
-        "version": "v20261101-213023"
+        "version": "v20261117-033622"
       },
       "packs": [
         {
@@ -819,7 +819,7 @@
         },
         {
           "id": "web-suite",
-          "version": "1.0.0",
+          "version": "1.1.1",
           "description": "Web Studio's own layer on the Motion machine: ripgrep, the glTF Transform CLI and Lighthouse, the web toolchain (react, three, react-dom, vite, typescript, tailwindcss with its Vite plugin, zod, lucide-react, @tanstack/react-start) installed globally and pre-cached for an offline project install together with better-sqlite3, and the three Web workflow skills baked at registry versions (web-marketing-site, web-generation-app, web-3d-showcase). No router and no job workflow beyond them. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite",
@@ -837,7 +837,8 @@
             "zod",
             "lucide-react",
             "@tanstack/react-start",
-            "better-sqlite3"
+            "better-sqlite3",
+            "@tanstack/create-start"
           ],
           "agentGuidance": "The Web workflow skills are PRE-INSTALLED at /home/user/.claude/skills: web-marketing-site (a marketing site with a scroll-played generated film), web-generation-app (an image and video generation web app) and web-3d-showcase (stills to GLB to a Three.js selector). Do NOT reinstall. Tools: `rg`, `gltf-transform`, `lighthouse`, `vite` and `tsc` are on PATH; react, react-dom, vite, typescript, tailwindcss (+ @tailwindcss/vite), zod, lucide-react and @tanstack/react-start are installed under `$(npm root -g)` and sit in the npm cache with better-sqlite3, so a project installs with `npm install --offline <pkg>` and never needs the network for them. A package outside this list is a machine gap: stop and report it."
         }
