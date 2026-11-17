@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-17T03:35:51Z",
-  "sourceCommit": "b65dac054789a517678189b3c58ba22d378afa04",
+  "generatedAt": "2026-11-17T04:28:32Z",
+  "sourceCommit": "bd16bd4b068a4765f5e689e9bb31f2c08dee5b52",
   "templates": [
     {
       "name": "sl8-base",
@@ -383,19 +383,19 @@
     {
       "name": "sl8-marketing",
       "status": "active",
-      "currentVersion": "v20261102-024328",
+      "currentVersion": "v20261117-040830",
       "aliases": {
-        "versioned": "sl8-marketing:v20261102-024328",
+        "versioned": "sl8-marketing:v20261117-040830",
         "generic": "sl8-marketing"
       },
       "base": {
         "template": "sl8-video",
-        "version": "v20261101-181153"
+        "version": "v20261117-031855"
       },
       "packs": [
         {
           "id": "marketing-suite",
-          "version": "1.0.0",
+          "version": "1.0.1",
           "description": "Bakes marketing-studio's twelve skills into /home/user/.claude/skills (via .agents/skills) on top of the Video chain's: the eight workflow skills (marketing-branded-graphic, marketing-ad-localization, marketing-winner-analysis, marketing-thumbnail, marketing-brand-kit, marketing-campaign-pack, marketing-ad-remake, marketing-site-creator-video) and four companion skills (marketing-static-copywriting, marketing-static-ad-production, marketing-commercial, marketing-ugc). Also installs, from Debian's archive, librsvg2-bin (rsvg-convert), python3-fonttools with brotli, tesseract-ocr with the eng, deu, fra, spa, por, hin, ara, chi-sim and chi-tra language packs, and HarfBuzz shaping (libharfbuzz-bin hb-view, libraqm0, libfribidi0). Installs no skill a parent bakes and replaces none. No router and no job workflow beyond the skills' own. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. /etc/pip.conf (no-index, from sl8-image) is left as it is.",
           "provides": [
             "baked-skill-suite",
