@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-17T04:28:32Z",
-  "sourceCommit": "bd16bd4b068a4765f5e689e9bb31f2c08dee5b52",
+  "generatedAt": "2026-11-17T05:45:47Z",
+  "sourceCommit": "53d9458c52377625c1372ab9e7c3294724d2d892",
   "templates": [
     {
       "name": "sl8-base",
@@ -440,14 +440,14 @@
     {
       "name": "sl8-motion",
       "status": "active",
-      "currentVersion": "v20261101-213023",
+      "currentVersion": "v20261117-033622",
       "aliases": {
-        "versioned": "sl8-motion:v20261101-213023",
+        "versioned": "sl8-motion:v20261117-033622",
         "generic": "sl8-motion"
       },
       "base": {
         "template": "sl8-image",
-        "version": "v20261101-180640"
+        "version": "v20261117-031307"
       },
       "packs": [
         {
@@ -478,7 +478,7 @@
         },
         {
           "id": "hyperframes-suite",
-          "version": "1.4.1",
+          "version": "1.4.3",
           "description": "Bakes the hyperframes-studio tool-usage suite into /home/user/.claude/skills: the hyperframes-* domain skills, media-use, figma, the generic motion-graphics workflow and the 5-skill motion-quality doctrine chain, and pre-warms the npx cache for the project-pinned hyperframes CLI. No router: under the Studio machine policy (doc 16 §B.1 layer 7) routers and job-specific workflows belong to Factory bots. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install. 1.4.0 (HyperFrames 5.1.0): 22 own skills, adding screen-web-capture, motion-doc-explainer and the general-video, remotion-to-hyperframes, slideshow, music-to-video and product-launch-video workflows at their registry versions. 1.4.1: motion-doc-explainer 1.0.1.",
           "provides": [
             "baked-skill-suite"
