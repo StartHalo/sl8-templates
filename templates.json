@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-27T05:32:41Z",
-  "sourceCommit": "9ece8f38004667b44dae3b34516f74f0b9a47262",
+  "generatedAt": "2026-11-27T05:49:00Z",
+  "sourceCommit": "efecdcc07c9e60b1e1ff2a1c7ff89485c043bdaa",
   "templates": [
     {
       "name": "sl8-base",
@@ -705,14 +705,14 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20261117-031855",
+      "currentVersion": "v20261127-053314",
       "aliases": {
-        "versioned": "sl8-video:v20261117-031855",
+        "versioned": "sl8-video:v20261127-053314",
         "generic": "sl8-video"
       },
       "base": {
         "template": "sl8-image",
-        "version": "v20261117-031307"
+        "version": "v20261127-052501"
       },
       "packs": [
         {
