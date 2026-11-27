@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-27T06:30:53Z",
-  "sourceCommit": "bcd8bff7b84f76f7da69c5e5ee7d8d9c24b6ab67",
+  "generatedAt": "2026-11-27T06:31:36Z",
+  "sourceCommit": "1ca0a2c2ec6d6d586d206662cdc1b65cf64054db",
   "templates": [
     {
       "name": "sl8-base",
@@ -383,14 +383,14 @@
     {
       "name": "sl8-marketing",
       "status": "active",
-      "currentVersion": "v20261117-040830",
+      "currentVersion": "v20261127-061621",
       "aliases": {
-        "versioned": "sl8-marketing:v20261117-040830",
+        "versioned": "sl8-marketing:v20261127-061621",
         "generic": "sl8-marketing"
       },
       "base": {
         "template": "sl8-video",
-        "version": "v20261117-031855"
+        "version": "v20261127-053314"
       },
       "packs": [
         {
@@ -653,14 +653,14 @@
     {
       "name": "sl8-story",
       "status": "active",
-      "currentVersion": "v20261117-054617",
+      "currentVersion": "v20261127-061137",
       "aliases": {
-        "versioned": "sl8-story:v20261117-054617",
+        "versioned": "sl8-story:v20261127-061137",
         "generic": "sl8-story"
       },
       "base": {
         "template": "sl8-video",
-        "version": "v20261117-031855"
+        "version": "v20261127-053314"
       },
       "packs": [
         {
@@ -705,14 +705,14 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20261117-031855",
+      "currentVersion": "v20261127-053314",
       "aliases": {
-        "versioned": "sl8-video:v20261117-031855",
+        "versioned": "sl8-video:v20261127-053314",
         "generic": "sl8-video"
       },
       "base": {
         "template": "sl8-image",
-        "version": "v20261117-031307"
+        "version": "v20261127-052501"
       },
       "packs": [
         {
