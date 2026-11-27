@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-27T05:24:28Z",
-  "sourceCommit": "cf0ce3236c12974ff6a5e8f145baa90bdce993d7",
+  "generatedAt": "2026-11-27T05:32:41Z",
+  "sourceCommit": "9ece8f38004667b44dae3b34516f74f0b9a47262",
   "templates": [
     {
       "name": "sl8-base",
@@ -241,14 +241,14 @@
     {
       "name": "sl8-image",
       "status": "active",
-      "currentVersion": "v20261117-031307",
+      "currentVersion": "v20261127-052501",
       "aliases": {
-        "versioned": "sl8-image:v20261117-031307",
+        "versioned": "sl8-image:v20261127-052501",
         "generic": "sl8-image"
       },
       "base": {
         "template": "sl8-base",
-        "version": "v20261115-171326"
+        "version": "v20261127-043646"
       },
       "packs": [
         {
