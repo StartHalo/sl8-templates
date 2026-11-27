@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-27T06:22:23Z",
-  "sourceCommit": "30b1affdbff6efe00bc533d51c6c2b04e7605535",
+  "generatedAt": "2026-11-27T06:30:53Z",
+  "sourceCommit": "bcd8bff7b84f76f7da69c5e5ee7d8d9c24b6ab67",
   "templates": [
     {
       "name": "sl8-base",
@@ -383,14 +383,14 @@
     {
       "name": "sl8-marketing",
       "status": "active",
-      "currentVersion": "v20261127-061621",
+      "currentVersion": "v20261117-040830",
       "aliases": {
-        "versioned": "sl8-marketing:v20261127-061621",
+        "versioned": "sl8-marketing:v20261117-040830",
         "generic": "sl8-marketing"
       },
       "base": {
         "template": "sl8-video",
-        "version": "v20261127-053314"
+        "version": "v20261117-031855"
       },
       "packs": [
         {
@@ -440,14 +440,14 @@
     {
       "name": "sl8-motion",
       "status": "active",
-      "currentVersion": "v20261117-033622",
+      "currentVersion": "v20261127-054933",
       "aliases": {
-        "versioned": "sl8-motion:v20261117-033622",
+        "versioned": "sl8-motion:v20261127-054933",
         "generic": "sl8-motion"
       },
       "base": {
         "template": "sl8-image",
-        "version": "v20261117-031307"
+        "version": "v20261127-052501"
       },
       "packs": [
         {
@@ -705,14 +705,14 @@
     {
       "name": "sl8-video",
       "status": "active",
-      "currentVersion": "v20261127-053314",
+      "currentVersion": "v20261117-031855",
       "aliases": {
-        "versioned": "sl8-video:v20261127-053314",
+        "versioned": "sl8-video:v20261117-031855",
         "generic": "sl8-video"
       },
       "base": {
         "template": "sl8-image",
-        "version": "v20261127-052501"
+        "version": "v20261117-031307"
       },
       "packs": [
         {
@@ -800,14 +800,14 @@
     {
       "name": "sl8-web",
       "status": "active",
-      "currentVersion": "v20261117-061756",
+      "currentVersion": "v20261127-062256",
       "aliases": {
-        "versioned": "sl8-web:v20261117-061756",
+        "versioned": "sl8-web:v20261127-062256",
         "generic": "sl8-web"
       },
       "base": {
         "template": "sl8-motion",
-        "version": "v20261117-033622"
+        "version": "v20261127-054933"
       },
       "packs": [
         {
@@ -819,7 +819,7 @@
         },
         {
           "id": "web-suite",
-          "version": "1.1.1",
+          "version": "1.1.2",
           "description": "Web Studio's own layer on the Motion machine: ripgrep, the glTF Transform CLI and Lighthouse, the web toolchain (react, three, react-dom, vite, typescript, tailwindcss with its Vite plugin, zod, lucide-react, @tanstack/react-start) installed globally and pre-cached for an offline project install together with better-sqlite3, and the three Web workflow skills baked at registry versions (web-marketing-site, web-generation-app, web-3d-showcase). No router and no job workflow beyond them. Requires a GITHUB_TOKEN build env (registry read); blanked from the image ENV after install.",
           "provides": [
             "baked-skill-suite",
